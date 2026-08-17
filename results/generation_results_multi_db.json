@@ -1,0 +1,1282 @@
+[
+  {
+    "db_id": "pets_1",
+    "question": "Find the number of pets whose weight is heavier than 10.",
+    "gold_sql": "SELECT count(*) FROM pets WHERE weight  >  10",
+    "sql_baseline": "```sql\nSELECT COUNT(*) FROM pets WHERE weight > 10;\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM pets WHERE weight > 10",
+    "sql_memory_B": "SELECT count(*)\nFROM pets\nWHERE weight > 10\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "How many pets have a greater weight than 10?",
+    "gold_sql": "SELECT count(*) FROM pets WHERE weight  >  10",
+    "sql_baseline": "```sql\nSELECT COUNT(*) FROM pets WHERE weight > 10;\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM pets WHERE weight > 10",
+    "sql_memory_B": "SELECT count(*)\nFROM pets\nWHERE weight > 10\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the weight of the youngest dog.",
+    "gold_sql": "SELECT weight FROM pets ORDER BY pet_age LIMIT 1",
+    "sql_baseline": "```sql\nSELECT weight \nFROM pets \nWHERE pettype = 'dog' \nORDER BY pet_age ASC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT Weight FROM PETS WHERE PetType = \"dog\" ORDER BY Pet_Age ASC LIMIT 1",
+    "sql_memory_B": "SELECT pets.weight\nFROM pets\nWHERE pets.pettype = \"dog\"\nORDER BY pets.pet_age ASC\nLIMIT 1"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "How much does the youngest dog weigh?",
+    "gold_sql": "SELECT weight FROM pets ORDER BY pet_age LIMIT 1",
+    "sql_baseline": "```sql\nSELECT weight \nFROM pets \nWHERE pettype = 'dog' \nORDER BY pet_age ASC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT weight FROM pets WHERE pettype = 'dog' ORDER BY pet_age ASC LIMIT 1",
+    "sql_memory_B": "SELECT pets.weight\nFROM pets\nWHERE pets.pettype = \"dog\"\nORDER BY pets.pet_age ASC\nLIMIT 1"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the maximum weight for each type of pet. List the maximum weight and pet type.",
+    "gold_sql": "SELECT max(weight) ,  petType FROM pets GROUP BY petType",
+    "sql_baseline": "```sql\nSELECT pettype, MAX(weight) AS max_weight\nFROM pets\nGROUP BY pettype;\n```",
+    "sql_memory_A": "SELECT pettype, max(weight) FROM pets GROUP BY pettype",
+    "sql_memory_B": "SELECT pets.pettype, max(pets.weight)\nFROM pets\nGROUP BY pets.pettype\nORDER BY pets.pettype;"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "List the maximum weight and type for each type of pet.",
+    "gold_sql": "SELECT max(weight) ,  petType FROM pets GROUP BY petType",
+    "sql_baseline": "```sql\nSELECT pettype, MAX(weight) AS max_weight\nFROM pets\nGROUP BY pettype;\n```",
+    "sql_memory_A": "SELECT pettype, max(weight) FROM pets GROUP BY pettype;",
+    "sql_memory_B": "SELECT pettype, max(weight)\nFROM pets\nGROUP BY pettype\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find number of pets owned by students who are older than 20.",
+    "gold_sql": "SELECT count(*) FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid WHERE T1.age  >  20",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS number_of_pets\nFROM has_pet\nWHERE stuid IN (SELECT stuid FROM student WHERE age > 20);\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM has_pet WHERE stuid IN (SELECT stuid FROM student WHERE age > 20)",
+    "sql_memory_B": "SELECT count( DISTINCT has_pet.petid )\nFROM has_pet JOIN student ON has_pet.stuid = student.stuid\nWHERE student.age > 20\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "How many pets are owned by students that have an age greater than 20?",
+    "gold_sql": "SELECT count(*) FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid WHERE T1.age  >  20",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS pet_count\nFROM has_pet\nWHERE stuid IN (SELECT stuid FROM student WHERE age > 20);\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM has_pet WHERE stuid IN (SELECT stuid FROM student WHERE age > 20)",
+    "sql_memory_B": "SELECT count( * )\nFROM has_pet\nJOIN student ON has_pet.stuid = student.stuid\nWHERE student.age > 20\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the number of dog pets that are raised by female students (with sex F).",
+    "gold_sql": "SELECT count(*) FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T2.petid  =  T3.petid WHERE T1.sex  =  'F' AND T3.pettype  =  'dog'",
+    "sql_baseline": "```sql\nSELECT COUNT(*) \nFROM has_pet hp \nJOIN pets p ON hp.petid = p.petid \nJOIN student s ON hp.stuid = s.stuid \nWHERE p.pettype = 'dog' AND s.sex = 'F';\n```",
+    "sql_memory_A": "SELECT COUNT(DISTINCT hp.stuid) \nFROM has_pet hp \nJOIN pets p ON hp.petid = p.petid \nJOIN student s ON hp.stuid = s.stuid \nWHERE s.sex = 'F' AND p.pettype = 'dog'",
+    "sql_memory_B": "SELECT count( * )\nFROM has_pet JOIN pets ON has_pet.petid = pets.petid\nJOIN student ON has_pet.stuid = student.stuid\nWHERE pets.pettype = \"dog\" AND student.sex = \"F\"\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "How many dog pets are raised by female students?",
+    "gold_sql": "SELECT count(*) FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T2.petid  =  T3.petid WHERE T1.sex  =  'F' AND T3.pettype  =  'dog'",
+    "sql_baseline": "```sql\nSELECT COUNT(*) \nFROM has_pet hp \nJOIN pets p ON hp.petid = p.petid \nJOIN student s ON hp.stuid = s.stuid \nWHERE p.pettype = 'dog' AND s.sex = 'F';\n```",
+    "sql_memory_A": "SELECT COUNT(DISTINCT h.stuid) FROM has_pet h JOIN pets p ON h.petid = p.petid JOIN student s ON h.stuid = s.stuid WHERE p.pettype = 'dog' AND s.sex = 'F'",
+    "sql_memory_B": "SELECT count( DISTINCT has_pet.stuid )\nFROM has_pet JOIN pets ON has_pet.petid = pets.petid\nJOIN student ON has_pet.stuid = student.stuid\nWHERE pets.pettype = \"dog\" AND student.sex = \"female\"\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the number of distinct type of pets.",
+    "gold_sql": "SELECT count(DISTINCT pettype) FROM pets",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT pettype) AS distinct_pet_types FROM pets;\n```",
+    "sql_memory_A": "SELECT count(DISTINCT pettype) FROM pets",
+    "sql_memory_B": "SELECT count( DISTINCT pets.pettype )\nFROM pets\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "How many different types of pet are there?",
+    "gold_sql": "SELECT count(DISTINCT pettype) FROM pets",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT pettype) AS different_pet_types FROM pets;\n```",
+    "sql_memory_A": "SELECT COUNT(DISTINCT pettype) FROM pets",
+    "sql_memory_B": "SELECT COUNT(DISTINCT pets.pettype) \nFROM pets \nGROUP BY NONE \nORDER BY NONE \nHAVING NONE \nLIMIT NONE \nINTERSECT NONE \nEXCEPT NONE \nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the first name of students who have cat or dog pet.",
+    "gold_sql": "SELECT DISTINCT T1.Fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat' OR T3.pettype  =  'dog'",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.fname\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nJOIN pets p ON hp.petid = p.petid\nWHERE p.pettype IN ('cat', 'dog');\n```",
+    "sql_memory_A": "SELECT DISTINCT S.fname FROM student S JOIN has_pet HP ON S.stuid = HP.stuid JOIN pets P ON HP.petid = P.petid WHERE P.pettype IN ('cat', 'dog')",
+    "sql_memory_B": "SELECT DISTINCT student.fname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype IN ('cat', 'dog')\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What are the first names of every student who has a cat or dog as a pet?",
+    "gold_sql": "SELECT DISTINCT T1.Fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat' OR T3.pettype  =  'dog'",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.fname\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nJOIN pets p ON hp.petid = p.petid\nWHERE p.pettype IN ('cat', 'dog');\n```",
+    "sql_memory_A": "SELECT DISTINCT s.fname FROM student s JOIN has_pet hp ON s.stuid = hp.stuid JOIN pets p ON hp.petid = p.petid WHERE p.pettype IN ('cat', 'dog')",
+    "sql_memory_B": "SELECT DISTINCT student.fname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype IN (\"cat\", \"dog\")\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the first name of students who have both cat and dog pets .",
+    "gold_sql": "select t1.fname from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid join pets as t3 on t3.petid  =  t2.petid where t3.pettype  =  'cat' intersect select t1.fname from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid join pets as t3 on t3.petid  =  t2.petid where t3.pettype  =  'dog'",
+    "sql_baseline": "```sql\nSELECT s.fname\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nJOIN pets p ON hp.petid = p.petid\nWHERE p.pettype IN ('cat', 'dog')\nGROUP BY s.stuid\nHAVING COUNT(DISTINCT p.pettype) = 2;\n```",
+    "sql_memory_A": "SELECT DISTINCT s.fname \nFROM student s \nJOIN has_pet hp1 ON s.stuid = hp1.stuid \nJOIN pets p1 ON hp1.petid = p1.petid AND p1.pettype = 'cat' \nJOIN has_pet hp2 ON s.stuid = hp2.stuid \nJOIN pets p2 ON hp2.petid = p2.petid AND p2.pettype = 'dog'",
+    "sql_memory_B": "SELECT student.fname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype IN ('cat', 'dog')\nGROUP BY student.stuid\nHAVING COUNT(DISTINCT pets.pettype) = 2\nORDER BY NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What are the students' first names who have both cats and dogs as pets?",
+    "gold_sql": "SELECT T1.Fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat' INTERSECT SELECT T1.Fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog'",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.fname\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nJOIN pets p ON hp.petid = p.petid\nWHERE p.pettype IN ('cat', 'dog')\nGROUP BY s.stuid\nHAVING COUNT(DISTINCT p.pettype) = 2;\n```",
+    "sql_memory_A": "SELECT DISTINCT s.fname \nFROM student s \nJOIN has_pet hp ON s.stuid = hp.stuid \nJOIN pets p ON hp.petid = p.petid \nWHERE p.pettype IN ('cat', 'dog') \nGROUP BY s.stuid \nHAVING COUNT(DISTINCT p.pettype) = 2;",
+    "sql_memory_B": "SELECT student.fname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype IN ('cat', 'dog')\nGROUP BY student.stuid\nHAVING COUNT(DISTINCT pets.pettype) = 2\nORDER BY NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the major and age of students who do not have a cat pet.",
+    "gold_sql": "SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')",
+    "sql_baseline": "```sql\nSELECT s.major, s.age\nFROM student s\nLEFT JOIN has_pet hp ON s.stuid = hp.stuid\nLEFT JOIN pets p ON hp.petid = p.petid\nWHERE p.pettype != 'cat' OR p.pettype IS NULL;\n```",
+    "sql_memory_A": "SELECT major, age FROM student WHERE stuid NOT IN (SELECT stuid FROM has_pet JOIN pets ON has_pet.petid = pets.petid WHERE pets.pettype = 'cat')",
+    "sql_memory_B": "SELECT student.major, student.age\nFROM student\nWHERE student.stuid NOT IN (SELECT has_pet.stuid\n                            FROM has_pet JOIN pets ON has_pet.petid = pets.petid\n                            WHERE pets.pettype = 'cat')\nGROUP BY student.major, student.age\nORDER BY student.major, student.age;"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What major is every student who does not own a cat as a pet, and also how old are they?",
+    "gold_sql": "SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.major, s.age\nFROM student s\nLEFT JOIN has_pet hp ON s.stuid = hp.stuid\nLEFT JOIN pets p ON hp.petid = p.petid\nWHERE p.pettype IS NULL OR p.pettype != 'cat';\n```",
+    "sql_memory_A": "SELECT major, age FROM student WHERE stuid NOT IN (SELECT stuid FROM has_pet JOIN pets ON has_pet.petid = pets.petid WHERE pets.pettype = 'cat')",
+    "sql_memory_B": "SELECT student.major, student.age\nFROM student\nWHERE student.stuid NOT IN (\n    SELECT has_pet.stuid\n    FROM has_pet JOIN pets ON has_pet.petid = pets.petid\n    WHERE pets.pettype = 'cat'\n)\nGROUP BY student.major, student.age\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the id of students who do not have a cat pet.",
+    "gold_sql": "SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'",
+    "sql_baseline": "```sql\nSELECT stuid \nFROM student \nWHERE stuid NOT IN (SELECT stuid FROM has_pet JOIN pets ON has_pet.petid = pets.petid WHERE pets.pettype = 'cat');\n```",
+    "sql_memory_A": "SELECT stuid FROM student EXCEPT SELECT stuid FROM has_pet JOIN pets ON has_pet.petid = pets.petid WHERE pets.pettype = 'cat'",
+    "sql_memory_B": "SELECT student.stuid\nFROM student\nWHERE student.stuid NOT IN (SELECT has_pet.stuid\n                             FROM has_pet JOIN pets ON has_pet.petid = pets.petid\n                             WHERE pets.pettype = 'cat')"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What are the ids of the students who do not own cats as pets?",
+    "gold_sql": "SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'",
+    "sql_baseline": "```sql\nSELECT s.stuid \nFROM student s \nWHERE s.stuid NOT IN (SELECT h.stuid FROM has_pet h JOIN pets p ON h.petid = p.petid WHERE p.pettype = 'cat');\n```",
+    "sql_memory_A": "SELECT stuid FROM student EXCEPT SELECT stuid FROM has_pet WHERE petid IN (SELECT petid FROM pets WHERE pettype = 'cat')",
+    "sql_memory_B": "SELECT student.stuid\nFROM student\nWHERE student.stuid NOT IN (SELECT has_pet.stuid\n                             FROM has_pet JOIN pets ON has_pet.petid = pets.petid\n                             WHERE pets.pettype = 'cat')"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the first name and age of students who have a dog but do not have a cat as a pet.",
+    "gold_sql": "SELECT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog' AND T1.stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')",
+    "sql_baseline": "```sql\nSELECT s.fname, s.age\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nJOIN pets p ON hp.petid = p.petid\nWHERE p.pettype = 'dog' AND s.stuid NOT IN (\n    SELECT hp2.stuid\n    FROM has_pet hp2\n    JOIN pets p2 ON hp2.petid = p2.petid\n    WHERE p2.pettype = 'cat'\n);\n```",
+    "sql_memory_A": "SELECT S.fname, S.age FROM student S JOIN has_pet HP ON S.stuid = HP.stuid JOIN pets P ON HP.petid = P.petid WHERE P.pettype = 'dog' AND S.stuid NOT IN (SELECT HP2.stuid FROM has_pet HP2 JOIN pets P2 ON HP2.petid = P2.petid WHERE P2.pettype = 'cat')",
+    "sql_memory_B": "SELECT student.fname, student.age\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype = 'dog' AND student.stuid NOT IN (\n    SELECT has_pet.stuid\n    FROM has_pet\n    JOIN pets ON has_pet.petid = pets.petid\n    WHERE pets.pettype = 'cat'\n)\nGROUP BY student.fname, student.age\nORDER BY student.fname;"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the first name of every student who has a dog but does not have a cat?",
+    "gold_sql": "SELECT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog' AND T1.stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.fname\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nJOIN pets p ON hp.petid = p.petid\nWHERE p.pettype = 'dog' AND s.stuid NOT IN (\n    SELECT hp2.stuid\n    FROM has_pet hp2\n    JOIN pets p2 ON hp2.petid = p2.petid\n    WHERE p2.pettype = 'cat'\n);\n```",
+    "sql_memory_A": "SELECT DISTINCT s.fname FROM student s \nWHERE s.stuid IN (SELECT h.stuid FROM has_pet h JOIN pets p ON h.petid = p.petid WHERE p.pettype = 'dog') \nAND s.stuid NOT IN (SELECT h.stuid FROM has_pet h JOIN pets p ON h.petid = p.petid WHERE p.pettype = 'cat')",
+    "sql_memory_B": "SELECT DISTINCT student.fname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype = 'dog' AND student.stuid NOT IN (\n    SELECT has_pet.stuid\n    FROM has_pet\n    JOIN pets ON has_pet.petid = pets.petid\n    WHERE pets.pettype = 'cat'\n)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the type and weight of the youngest pet.",
+    "gold_sql": "SELECT pettype ,  weight FROM pets ORDER BY pet_age LIMIT 1",
+    "sql_baseline": "```sql\nSELECT pettype, weight \nFROM pets \nWHERE petid = (SELECT petid FROM has_pet WHERE stuid = (SELECT stuid FROM student ORDER BY age ASC LIMIT 1)) \nORDER BY pet_age ASC LIMIT 1;\n```",
+    "sql_memory_A": "SELECT PetType, Weight FROM PETS ORDER BY Pet_Age ASC LIMIT 1",
+    "sql_memory_B": "SELECT pets.pettype, pets.weight\nFROM pets\nORDER BY pets.pet_age ASC\nLIMIT 1"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What type of pet is the youngest animal, and how much does it weigh?",
+    "gold_sql": "SELECT pettype ,  weight FROM pets ORDER BY pet_age LIMIT 1",
+    "sql_baseline": "```sql\nSELECT p.pettype, p.weight\nFROM pets p\nORDER BY p.pet_age ASC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT pettype, weight FROM pets ORDER BY pet_age ASC LIMIT 1",
+    "sql_memory_B": "SELECT pets.pettype, pets.weight\nFROM pets\nORDER BY pets.pet_age ASC\nLIMIT 1\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the id and weight of all pets whose age is older than 1.",
+    "gold_sql": "SELECT petid ,  weight FROM pets WHERE pet_age  >  1",
+    "sql_baseline": "```sql\nSELECT petid, weight FROM pets WHERE pet_age > 1;\n```",
+    "sql_memory_A": "SELECT petid, weight FROM pets WHERE pet_age > 1",
+    "sql_memory_B": "SELECT pets.petid, pets.weight\nFROM pets\nWHERE pets.pet_age > 1\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the id and weight of every pet who is older than 1?",
+    "gold_sql": "SELECT petid ,  weight FROM pets WHERE pet_age  >  1",
+    "sql_baseline": "```sql\nSELECT petid, weight FROM pets WHERE pet_age > 1;\n```",
+    "sql_memory_A": "SELECT petid, weight FROM pets WHERE pet_age > 1",
+    "sql_memory_B": "SELECT pets.petid, pets.weight\nFROM pets\nWHERE pets.pet_age > 1\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the average and maximum age for each type of pet.",
+    "gold_sql": "SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype",
+    "sql_baseline": "```sql\nSELECT p.pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age\nFROM pets p\nGROUP BY p.pettype;\n```",
+    "sql_memory_A": "SELECT pettype, avg(pet_age) AS average_age, max(pet_age) AS maximum_age FROM pets GROUP BY pettype",
+    "sql_memory_B": "SELECT avg( pets.pet_age ), max( pets.pet_age ), pets.pettype\nFROM has_pet\nJOIN pets ON has_pet.petid = pets.petid\nGROUP BY pets.pettype\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the average and maximum age for each pet type?",
+    "gold_sql": "SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype",
+    "sql_baseline": "```sql\nSELECT p.pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age\nFROM pets p\nGROUP BY p.pettype;\n```",
+    "sql_memory_A": "SELECT avg(pet_age), max(pet_age), pettype FROM pets GROUP BY pettype",
+    "sql_memory_B": "SELECT avg( pets.pet_age ), max( pets.pet_age ), pets.pettype\nFROM has_pet JOIN pets ON has_pet.petid = pets.petid\nGROUP BY pets.pettype\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the average weight for each pet type.",
+    "gold_sql": "SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype",
+    "sql_baseline": "```sql\nSELECT pettype, AVG(weight) AS average_weight\nFROM pets\nGROUP BY pettype;\n```",
+    "sql_memory_A": "SELECT pettype, avg(weight) FROM pets GROUP BY pettype",
+    "sql_memory_B": "SELECT pettype, avg(weight)\nFROM pets\nGROUP BY pettype\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the average weight for each type of pet?",
+    "gold_sql": "SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype",
+    "sql_baseline": "```sql\nSELECT pettype, AVG(weight) AS average_weight\nFROM pets\nGROUP BY pettype;\n```",
+    "sql_memory_A": "SELECT pettype, avg(weight) FROM pets GROUP BY pettype",
+    "sql_memory_B": "SELECT pets.pettype, avg(pets.weight)\nFROM pets\nGROUP BY pets.pettype\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the first name and age of students who have a pet.",
+    "gold_sql": "SELECT DISTINCT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid",
+    "sql_baseline": "```sql\nSELECT s.fname, s.age\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid;\n```",
+    "sql_memory_A": "SELECT S.fname, S.age FROM student S JOIN has_pet HP ON S.stuid = HP.stuid",
+    "sql_memory_B": "SELECT student.fname, student.age\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What are the different first names and ages of the students who do have pets?",
+    "gold_sql": "SELECT DISTINCT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.fname, s.age\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid;\n```",
+    "sql_memory_A": "SELECT DISTINCT S.Fname, S.Age FROM STUDENT S JOIN HAS_PET HP ON S.stuid = HP.stuid",
+    "sql_memory_B": "SELECT DISTINCT student.fname, student.age\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the id of the pet owned by student whose last name is \u2018Smith\u2019.",
+    "gold_sql": "SELECT T2.petid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid WHERE T1.Lname  =  'Smith'",
+    "sql_baseline": "```sql\nSELECT h.petid \nFROM student s \nJOIN has_pet h ON s.stuid = h.stuid \nWHERE s.lname = 'Smith';\n```",
+    "sql_memory_A": "SELECT T1.petid FROM has_pet AS T1 JOIN student AS T2 ON T1.stuid = T2.stuid WHERE T2.lname = 'Smith'",
+    "sql_memory_B": "SELECT has_pet.petid\nFROM has_pet JOIN student ON has_pet.stuid = student.stuid\nWHERE student.lname = 'Smith'\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the id of the pet owned by the student whose last name is 'Smith'?",
+    "gold_sql": "SELECT T2.petid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid WHERE T1.Lname  =  'Smith'",
+    "sql_baseline": "```sql\nSELECT h.petid \nFROM student s \nJOIN has_pet h ON s.stuid = h.stuid \nWHERE s.lname = 'Smith';\n```",
+    "sql_memory_A": "SELECT T2.petid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid = T2.stuid WHERE T1.lname = 'Smith'",
+    "sql_memory_B": "SELECT has_pet.petid\nFROM has_pet JOIN student ON has_pet.stuid = student.stuid\nWHERE student.lname = 'Smith'\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the number of pets for each student who has any pet and student id.",
+    "gold_sql": "SELECT count(*) ,  T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid",
+    "sql_baseline": "```sql\nSELECT s.stuid, COUNT(hp.petid) AS pet_count\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nGROUP BY s.stuid;\n```",
+    "sql_memory_A": "SELECT stuid, count(*) FROM has_pet GROUP BY stuid",
+    "sql_memory_B": "SELECT count( * ), has_pet.stuid\nFROM has_pet\nGROUP BY has_pet.stuid\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "For students who have pets , how many pets does each student have ? list their ids instead of names .",
+    "gold_sql": "select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid",
+    "sql_baseline": "```sql\nSELECT h.stuid, COUNT(h.petid) AS pet_count\nFROM has_pet h\nGROUP BY h.stuid;\n```",
+    "sql_memory_A": "SELECT stuid, count(*) FROM has_pet GROUP BY stuid",
+    "sql_memory_B": "SELECT has_pet.stuid, count(has_pet.petid) AS pet_count\nFROM has_pet\nGROUP BY has_pet.stuid\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the first name and gender of student who have more than one pet.",
+    "gold_sql": "SELECT T1.fname ,  T1.sex FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid HAVING count(*)  >  1",
+    "sql_baseline": "```sql\nSELECT s.fname, s.sex\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nGROUP BY s.stuid\nHAVING COUNT(hp.petid) > 1;\n```",
+    "sql_memory_A": "SELECT Fname, Sex FROM STUDENT WHERE stuid IN (SELECT stuid FROM has_pet GROUP BY stuid HAVING COUNT(petid) > 1)",
+    "sql_memory_B": "SELECT student.fname, student.sex\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nGROUP BY student.stuid\nHAVING COUNT(has_pet.petid) > 1\nORDER BY NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the first name and gender of the all the students who have more than one pet?",
+    "gold_sql": "SELECT T1.fname ,  T1.sex FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid HAVING count(*)  >  1",
+    "sql_baseline": "```sql\nSELECT s.fname, s.sex\nFROM student s\nJOIN has_pet hp ON s.stuid = hp.stuid\nGROUP BY s.stuid\nHAVING COUNT(hp.petid) > 1;\n```",
+    "sql_memory_A": "SELECT DISTINCT s.fname, s.sex FROM student s JOIN has_pet hp ON s.stuid = hp.stuid GROUP BY s.stuid HAVING COUNT(hp.petid) > 1",
+    "sql_memory_B": "SELECT student.fname, student.sex\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nGROUP BY student.stuid\nHAVING COUNT(has_pet.petid) > 1\nORDER BY NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the last name of the student who has a cat that is age 3.",
+    "gold_sql": "SELECT T1.lname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pet_age  =  3 AND T3.pettype  =  'cat'",
+    "sql_baseline": "```sql\nSELECT s.lname \nFROM student s \nJOIN has_pet hp ON s.stuid = hp.stuid \nJOIN pets p ON hp.petid = p.petid \nWHERE p.pettype = 'cat' AND p.pet_age = 3;\n```",
+    "sql_memory_A": "SELECT Lname FROM STUDENT WHERE stuid IN (SELECT stuid FROM HAS_PET WHERE petid IN (SELECT petid FROM PETS WHERE pet_age = 3 AND pettype = 'cat'))",
+    "sql_memory_B": "SELECT student.lname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype = \"cat\" AND pets.pet_age = 3\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the last name of the student who has a cat that is 3 years old?",
+    "gold_sql": "SELECT T1.lname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pet_age  =  3 AND T3.pettype  =  'cat'",
+    "sql_baseline": "```sql\nSELECT s.lname \nFROM student s \nJOIN has_pet hp ON s.stuid = hp.stuid \nJOIN pets p ON hp.petid = p.petid \nWHERE p.pettype = 'cat' AND p.pet_age = 3;\n```",
+    "sql_memory_A": "SELECT Lname FROM STUDENT WHERE stuid IN (SELECT stuid FROM HAS_PET WHERE petid IN (SELECT petid FROM PETS WHERE pettype = 'cat' AND pet_age = 3))",
+    "sql_memory_B": "SELECT student.lname\nFROM student\nJOIN has_pet ON student.stuid = has_pet.stuid\nJOIN pets ON has_pet.petid = pets.petid\nWHERE pets.pettype = \"cat\" AND pets.pet_age = 3\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "Find the average age of students who do not have any pet .",
+    "gold_sql": "select avg(age) from student where stuid not in (select stuid from has_pet)",
+    "sql_baseline": "```sql\nSELECT AVG(age) AS average_age\nFROM student\nWHERE stuid NOT IN (SELECT stuid FROM has_pet);\n```",
+    "sql_memory_A": "SELECT avg(age) FROM student WHERE stuid NOT IN (SELECT stuid FROM has_pet)",
+    "sql_memory_B": "SELECT avg( student.age )\nFROM student\nWHERE student.stuid NOT IN (SELECT stuid FROM has_pet)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "pets_1",
+    "question": "What is the average age for all students who do not own any pets ?",
+    "gold_sql": "select avg(age) from student where stuid not in (select stuid from has_pet)",
+    "sql_baseline": "```sql\nSELECT AVG(age) AS average_age\nFROM student\nWHERE stuid NOT IN (SELECT stuid FROM has_pet);\n```",
+    "sql_memory_A": "SELECT avg(age) FROM student WHERE stuid NOT IN (SELECT stuid FROM has_pet)",
+    "sql_memory_B": "SELECT avg(student.age)\nFROM student\nWHERE student.stuid NOT IN (SELECT stuid FROM has_pet)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "How many poker players are there?",
+    "gold_sql": "SELECT count(*) FROM poker_player",
+    "sql_baseline": "```sql\nSELECT COUNT(*) FROM poker_player;\n```",
+    "sql_memory_A": "SELECT count(*) FROM poker_player",
+    "sql_memory_B": "SELECT COUNT(*) FROM poker_player;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Count the number of poker players.",
+    "gold_sql": "SELECT count(*) FROM poker_player",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS player_count FROM poker_player;\n```",
+    "sql_memory_A": "SELECT count(*) FROM poker_player",
+    "sql_memory_B": "SELECT count( * )\nFROM poker_player\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "List the earnings of poker players in descending order.",
+    "gold_sql": "SELECT Earnings FROM poker_player ORDER BY Earnings DESC",
+    "sql_baseline": "```sql\nSELECT earnings FROM poker_player ORDER BY earnings DESC;\n```",
+    "sql_memory_A": "SELECT earnings FROM poker_player ORDER BY earnings DESC",
+    "sql_memory_B": "SELECT earnings\nFROM poker_player\nORDER BY earnings DESC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the earnings of poker players, ordered descending by value?",
+    "gold_sql": "SELECT Earnings FROM poker_player ORDER BY Earnings DESC",
+    "sql_baseline": "```sql\nSELECT earnings FROM poker_player ORDER BY earnings DESC;\n```",
+    "sql_memory_A": "SELECT earnings FROM poker_player ORDER BY earnings DESC",
+    "sql_memory_B": "SELECT poker_player.earnings\nFROM poker_player\nORDER BY poker_player.earnings DESC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "List the final tables made and the best finishes of poker players.",
+    "gold_sql": "SELECT Final_Table_Made ,  Best_Finish FROM poker_player",
+    "sql_baseline": "```sql\nSELECT final_table_made, best_finish FROM poker_player;\n```",
+    "sql_memory_A": "SELECT final_table_made, best_finish FROM poker_player;",
+    "sql_memory_B": "SELECT poker_player.final_table_made, poker_player.best_finish\nFROM poker_player;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the final tables made and best finishes for all poker players?",
+    "gold_sql": "SELECT Final_Table_Made ,  Best_Finish FROM poker_player",
+    "sql_baseline": "```sql\nSELECT final_table_made, best_finish FROM poker_player;\n```",
+    "sql_memory_A": "SELECT final_table_made, best_finish FROM poker_player;",
+    "sql_memory_B": "SELECT final_table_made, best_finish FROM poker_player;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the average earnings of poker players?",
+    "gold_sql": "SELECT avg(Earnings) FROM poker_player",
+    "sql_baseline": "```sql\nSELECT AVG(earnings) AS average_earnings FROM poker_player;\n```",
+    "sql_memory_A": "SELECT avg(earnings) FROM poker_player",
+    "sql_memory_B": "SELECT avg(earnings) FROM poker_player;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the average earnings across all poker players.",
+    "gold_sql": "SELECT avg(Earnings) FROM poker_player",
+    "sql_baseline": "```sql\nSELECT AVG(earnings) AS average_earnings FROM poker_player;\n```",
+    "sql_memory_A": "SELECT avg(earnings) FROM poker_player",
+    "sql_memory_B": "SELECT avg(earnings) FROM poker_player;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the money rank of the poker player with the highest earnings?",
+    "gold_sql": "SELECT Money_Rank FROM poker_player ORDER BY Earnings DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT money_rank \nFROM poker_player \nWHERE earnings = (SELECT MAX(earnings) FROM poker_player);\n```",
+    "sql_memory_A": "SELECT money_rank FROM poker_player ORDER BY earnings DESC LIMIT 1;",
+    "sql_memory_B": "SELECT money_rank\nFROM poker_player\nWHERE earnings = (SELECT MAX(earnings) FROM poker_player)\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the money rank of the player with the greatest earnings.",
+    "gold_sql": "SELECT Money_Rank FROM poker_player ORDER BY Earnings DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT money_rank FROM poker_player ORDER BY earnings DESC LIMIT 1;\n```",
+    "sql_memory_A": "SELECT money_rank FROM poker_player ORDER BY earnings DESC LIMIT 1;",
+    "sql_memory_B": "SELECT money_rank\nFROM poker_player\nORDER BY earnings DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the maximum number of final tables made among poker players with earnings less than 200000?",
+    "gold_sql": "SELECT max(Final_Table_Made) FROM poker_player WHERE Earnings  <  200000",
+    "sql_baseline": "```sql\nSELECT MAX(final_table_made) \nFROM poker_player \nWHERE earnings < 200000;\n```",
+    "sql_memory_A": "SELECT max(final_table_made) FROM poker_player WHERE earnings < 200000;",
+    "sql_memory_B": "SELECT poker_player.people_id, max(poker_player.final_table_made)\nFROM poker_player\nWHERE poker_player.earnings < 200000\nGROUP BY poker_player.people_id\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the maximum final tables made across all poker players who have earnings below 200000.",
+    "gold_sql": "SELECT max(Final_Table_Made) FROM poker_player WHERE Earnings  <  200000",
+    "sql_baseline": "```sql\nSELECT MAX(final_table_made) \nFROM poker_player \nWHERE earnings < 200000;\n```",
+    "sql_memory_A": "SELECT max(final_table_made) FROM poker_player WHERE earnings < 200000;",
+    "sql_memory_B": "SELECT max(poker_player.final_table_made)\nFROM poker_player\nWHERE poker_player.earnings < 200000\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names of poker players?",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID",
+    "sql_baseline": "```sql\nSELECT p.name \nFROM poker_player pp \nJOIN people p ON pp.people_id = p.people_id;\n```",
+    "sql_memory_A": "SELECT name FROM people INNER JOIN poker_player ON people.people_id = poker_player.people_id",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the names of all the poker players.",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID",
+    "sql_baseline": "```sql\nSELECT p.name \nFROM people p \nJOIN poker_player pp ON p.people_id = pp.people_id;\n```",
+    "sql_memory_A": "SELECT name FROM people INNER JOIN poker_player ON people.people_id = poker_player.people_id",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names of poker players whose earnings is higher than 300000?",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID WHERE T2.Earnings  >  300000",
+    "sql_baseline": "```sql\nSELECT p.name \nFROM poker_player pp \nJOIN people p ON pp.people_id = p.people_id \nWHERE pp.earnings > 300000;\n```",
+    "sql_memory_A": "SELECT T2.name FROM poker_player AS T1 JOIN people AS T2 ON T1.people_id = T2.people_id WHERE T1.earnings > 300000",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nWHERE poker_player.earnings > 300000\nGROUP BY people.name\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Give the names of poker players who have earnings above 300000.",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID WHERE T2.Earnings  >  300000",
+    "sql_baseline": "```sql\nSELECT p.name \nFROM people p \nJOIN poker_player pp ON p.people_id = pp.people_id \nWHERE pp.earnings > 300000;\n```",
+    "sql_memory_A": "SELECT P.name FROM poker_player AS PP JOIN people AS P ON PP.people_id = P.people_id WHERE PP.earnings > 300000;",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player\nJOIN people ON poker_player.people_id = people.people_id\nWHERE poker_player.earnings > 300000\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "List the names of poker players ordered by the final tables made in ascending order.",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T2.Final_Table_Made",
+    "sql_baseline": "```sql\nSELECT p.name \nFROM people p \nJOIN poker_player pp ON p.people_id = pp.people_id \nORDER BY pp.final_table_made ASC;\n```",
+    "sql_memory_A": "SELECT name FROM people JOIN poker_player ON people.people_id = poker_player.people_id ORDER BY poker_player.final_table_made ASC",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player\nJOIN people ON poker_player.people_id = people.people_id\nORDER BY poker_player.final_table_made ASC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names of poker players, ordered ascending by the number of final tables they have made?",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T2.Final_Table_Made",
+    "sql_baseline": "```sql\nSELECT p.name\nFROM poker_player pp\nJOIN people p ON pp.people_id = p.people_id\nORDER BY pp.final_table_made ASC;\n```",
+    "sql_memory_A": "SELECT name FROM people JOIN poker_player ON people.people_id = poker_player.people_id ORDER BY final_table_made ASC",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player\nJOIN people ON poker_player.people_id = people.people_id\nORDER BY poker_player.final_table_made ASC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the birth date of the poker player with the lowest earnings?",
+    "gold_sql": "SELECT T1.Birth_Date FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T2.Earnings ASC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT p.birth_date \nFROM poker_player pp \nJOIN people p ON pp.people_id = p.people_id \nORDER BY pp.earnings ASC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT birth_date FROM people WHERE people_id = (SELECT people_id FROM poker_player ORDER BY earnings ASC LIMIT 1)",
+    "sql_memory_B": "SELECT people.birth_date\nFROM people\nJOIN poker_player ON people.people_id = poker_player.people_id\nWHERE poker_player.earnings = (SELECT min(earnings) FROM poker_player)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the birth date of the poker player with the lowest earnings.",
+    "gold_sql": "SELECT T1.Birth_Date FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T2.Earnings ASC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT p.birth_date \nFROM poker_player pp \nJOIN people p ON pp.people_id = p.people_id \nORDER BY pp.earnings ASC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT p.birth_date FROM people AS p JOIN poker_player AS pp ON p.people_id = pp.people_id ORDER BY pp.earnings LIMIT 1",
+    "sql_memory_B": "SELECT people.birth_date\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nORDER BY poker_player.earnings ASC\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the money rank of the tallest poker player?",
+    "gold_sql": "SELECT T2.Money_Rank FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T1.Height DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT money_rank \nFROM poker_player \nWHERE poker_player_id = (\n    SELECT poker_player_id \n    FROM poker_player \n    JOIN people ON poker_player.people_id = people.people_id \n    ORDER BY height DESC \n    LIMIT 1\n);\n```",
+    "sql_memory_A": "SELECT money_rank FROM poker_player JOIN people ON poker_player.people_id = people.people_id ORDER BY height DESC LIMIT 1;",
+    "sql_memory_B": "SELECT poker_player.money_rank\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nORDER BY people.height DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the money rank of the poker player with the greatest height.",
+    "gold_sql": "SELECT T2.Money_Rank FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T1.Height DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT money_rank \nFROM poker_player \nJOIN people ON poker_player.people_id = people.people_id \nORDER BY height DESC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT money_rank FROM poker_player JOIN people ON poker_player.people_id = people.people_id ORDER BY height DESC LIMIT 1",
+    "sql_memory_B": "SELECT poker_player.money_rank\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nORDER BY people.height DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the average earnings of poker players with height higher than 200?",
+    "gold_sql": "SELECT avg(T2.Earnings) FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID WHERE T1.Height  >  200",
+    "sql_baseline": "```sql\nSELECT AVG(earnings) AS average_earnings\nFROM poker_player\nJOIN people ON poker_player.people_id = people.people_id\nWHERE height > 200;\n```",
+    "sql_memory_A": "SELECT avg(earnings) FROM poker_player AS T1 JOIN people AS T2 ON T1.people_id = T2.people_id WHERE T2.height > 200;",
+    "sql_memory_B": "SELECT avg(poker_player.earnings)\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nWHERE people.height > 200\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Give average earnings of poker players who are taller than 200.",
+    "gold_sql": "SELECT avg(T2.Earnings) FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID WHERE T1.Height  >  200",
+    "sql_baseline": "```sql\nSELECT AVG(earnings) AS average_earnings\nFROM poker_player\nJOIN people ON poker_player.people_id = people.people_id\nWHERE height > 200;\n```",
+    "sql_memory_A": "SELECT avg(T1.earnings) FROM poker_player AS T1 JOIN people AS T2 ON T1.people_id = T2.people_id WHERE T2.height > 200;",
+    "sql_memory_B": "SELECT avg(poker_player.earnings)\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nWHERE people.height > 200\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names of poker players in descending order of earnings?",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T2.Earnings DESC",
+    "sql_baseline": "```sql\nSELECT p.name\nFROM poker_player pp\nJOIN people p ON pp.people_id = p.people_id\nORDER BY pp.earnings DESC;\n```",
+    "sql_memory_A": "SELECT T2.name FROM poker_player AS T1 JOIN people AS T2 ON T1.people_id = T2.people_id ORDER BY T1.earnings DESC",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player JOIN people ON poker_player.people_id = people.people_id\nORDER BY poker_player.earnings DESC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the names of poker players sorted by their earnings descending.",
+    "gold_sql": "SELECT T1.Name FROM people AS T1 JOIN poker_player AS T2 ON T1.People_ID  =  T2.People_ID ORDER BY T2.Earnings DESC",
+    "sql_baseline": "```sql\nSELECT p.name \nFROM people p \nJOIN poker_player pp ON p.people_id = pp.people_id \nORDER BY pp.earnings DESC;\n```",
+    "sql_memory_A": "SELECT name FROM people JOIN poker_player ON people.people_id = poker_player.people_id ORDER BY poker_player.earnings DESC",
+    "sql_memory_B": "SELECT people.name\nFROM poker_player\nJOIN people ON poker_player.people_id = people.people_id\nORDER BY poker_player.earnings DESC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are different nationalities of people and the corresponding number of people from each nation?",
+    "gold_sql": "SELECT Nationality ,  COUNT(*) FROM people GROUP BY Nationality",
+    "sql_baseline": "```sql\nSELECT nationality, COUNT(*) AS number_of_people\nFROM people\nGROUP BY nationality;\n```",
+    "sql_memory_A": "SELECT nationality, COUNT(*) FROM people GROUP BY nationality",
+    "sql_memory_B": "SELECT people.nationality, count(*)\nFROM people\nGROUP BY people.nationality\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "How many people are there of each nationality?",
+    "gold_sql": "SELECT Nationality ,  COUNT(*) FROM people GROUP BY Nationality",
+    "sql_baseline": "```sql\nSELECT nationality, COUNT(*) AS count\nFROM people\nGROUP BY nationality;\n```",
+    "sql_memory_A": "SELECT nationality, COUNT(*) FROM people GROUP BY nationality",
+    "sql_memory_B": "SELECT people.nationality, count(*)\nFROM people\nGROUP BY people.nationality;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What is the most common nationality of people?",
+    "gold_sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT nationality, COUNT(*) AS count\nFROM people\nGROUP BY nationality\nORDER BY count DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT nationality FROM people GROUP BY nationality ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT people.nationality\nFROM people\nGROUP BY people.nationality\nORDER BY count(*) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Give the nationality that is most common across all people.",
+    "gold_sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT nationality\nFROM people\nGROUP BY nationality\nORDER BY COUNT(*) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT nationality FROM people GROUP BY nationality ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT people.nationality\nFROM people\nGROUP BY people.nationality\nORDER BY count(*) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the nationalities that are shared by at least two people?",
+    "gold_sql": "SELECT Nationality FROM people GROUP BY Nationality HAVING COUNT(*)  >=  2",
+    "sql_baseline": "```sql\nSELECT nationality\nFROM people\nGROUP BY nationality\nHAVING COUNT(people_id) >= 2;\n```",
+    "sql_memory_A": "SELECT nationality FROM people GROUP BY nationality HAVING COUNT(*) >= 2",
+    "sql_memory_B": "SELECT p.nationality\nFROM people p\nGROUP BY p.nationality\nHAVING COUNT(*) >= 2;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Return the nationalities for which there are two or more people.",
+    "gold_sql": "SELECT Nationality FROM people GROUP BY Nationality HAVING COUNT(*)  >=  2",
+    "sql_baseline": "```sql\nSELECT nationality\nFROM people\nGROUP BY nationality\nHAVING COUNT(people_id) >= 2;\n```",
+    "sql_memory_A": "SELECT nationality FROM people GROUP BY nationality HAVING COUNT(*) >= 2",
+    "sql_memory_B": "SELECT people.nationality\nFROM people\nGROUP BY people.nationality\nHAVING count(people.people_id) >= 2;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "List the names and birth dates of people in ascending alphabetical order of name.",
+    "gold_sql": "SELECT Name ,  Birth_Date FROM people ORDER BY Name ASC",
+    "sql_baseline": "```sql\nSELECT name, birth_date FROM people ORDER BY name ASC;\n```",
+    "sql_memory_A": "SELECT name, birth_date FROM people ORDER BY name ASC",
+    "sql_memory_B": "SELECT people.name, people.birth_date\nFROM people\nORDER BY people.name ASC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names and birth dates of people, ordered by their names in alphabetical order?",
+    "gold_sql": "SELECT Name ,  Birth_Date FROM people ORDER BY Name ASC",
+    "sql_baseline": "```sql\nSELECT name, birth_date FROM people ORDER BY name;\n```",
+    "sql_memory_A": "SELECT name, birth_date FROM people ORDER BY name",
+    "sql_memory_B": "SELECT people.name, people.birth_date\nFROM people\nORDER BY people.name ASC"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Show names of people whose nationality is not \"Russia\".",
+    "gold_sql": "SELECT Name FROM people WHERE Nationality != \"Russia\"",
+    "sql_baseline": "```sql\nSELECT name FROM people WHERE nationality != 'Russia';\n```",
+    "sql_memory_A": "SELECT name FROM people WHERE nationality != \"Russia\"",
+    "sql_memory_B": "SELECT people.name\nFROM people\nWHERE people.nationality != \"Russia\"\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names of people who are not from Russia?",
+    "gold_sql": "SELECT Name FROM people WHERE Nationality != \"Russia\"",
+    "sql_baseline": "```sql\nSELECT name FROM people WHERE nationality != 'Russia';\n```",
+    "sql_memory_A": "SELECT name FROM people WHERE nationality != \"Russia\"",
+    "sql_memory_B": "SELECT people.name\nFROM people\nWHERE people.nationality != \"Russia\"\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "List the names of people that are not poker players.",
+    "gold_sql": "SELECT Name FROM people WHERE People_ID NOT IN (SELECT People_ID FROM poker_player)",
+    "sql_baseline": "```sql\nSELECT name FROM people WHERE people_id NOT IN (SELECT people_id FROM poker_player);\n```",
+    "sql_memory_A": "SELECT name FROM people WHERE people_id NOT IN (SELECT people_id FROM poker_player)",
+    "sql_memory_B": "SELECT people.name\nFROM people\nWHERE people.people_id NOT IN (SELECT poker_player.people_id FROM poker_player)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "What are the names of people who do not play poker?",
+    "gold_sql": "SELECT Name FROM people WHERE People_ID NOT IN (SELECT People_ID FROM poker_player)",
+    "sql_baseline": "```sql\nSELECT name FROM people WHERE people_id NOT IN (SELECT people_id FROM poker_player);\n```",
+    "sql_memory_A": "SELECT name FROM people WHERE people_id NOT IN (SELECT people_id FROM poker_player)",
+    "sql_memory_B": "SELECT people.name\nFROM people\nWHERE people.people_id NOT IN (SELECT poker_player.people_id\nFROM poker_player)\nORDER BY people.name;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "How many distinct nationalities are there?",
+    "gold_sql": "SELECT count(DISTINCT Nationality) FROM people",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT nationality) FROM people;\n```",
+    "sql_memory_A": "SELECT COUNT(DISTINCT nationality) FROM people",
+    "sql_memory_B": "SELECT count(DISTINCT people.nationality) FROM people;"
+  },
+  {
+    "db_id": "poker_player",
+    "question": "Count the number of different nationalities.",
+    "gold_sql": "SELECT count(DISTINCT Nationality) FROM people",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT nationality) FROM people;\n```",
+    "sql_memory_A": "SELECT COUNT(DISTINCT nationality) FROM people",
+    "sql_memory_B": "SELECT count(DISTINCT nationality) FROM people;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "How many conductors are there?",
+    "gold_sql": "SELECT count(*) FROM conductor",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS conductor_count FROM conductor;\n```",
+    "sql_memory_A": "SELECT count(*) FROM conductor",
+    "sql_memory_B": "SELECT count(*) FROM conductor;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Count the number of conductors.",
+    "gold_sql": "SELECT count(*) FROM conductor",
+    "sql_baseline": "```sql\nSELECT COUNT(*) FROM conductor;\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM conductor",
+    "sql_memory_B": "SELECT count( DISTINCT conductor.conductor_id )\nFROM conductor\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "List the names of conductors in ascending order of age.",
+    "gold_sql": "SELECT Name FROM conductor ORDER BY Age ASC",
+    "sql_baseline": "```sql\nSELECT name FROM conductor ORDER BY age ASC;\n```",
+    "sql_memory_A": "SELECT name FROM conductor ORDER BY age ASC",
+    "sql_memory_B": "SELECT name\nFROM conductor\nORDER BY age ASC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the names of conductors, ordered by age?",
+    "gold_sql": "SELECT Name FROM conductor ORDER BY Age ASC",
+    "sql_baseline": "```sql\nSELECT name FROM conductor ORDER BY age;\n```",
+    "sql_memory_A": "SELECT name FROM conductor ORDER BY age",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor\nORDER BY conductor.age ASC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the names of conductors whose nationalities are not \"USA\"?",
+    "gold_sql": "SELECT Name FROM conductor WHERE Nationality != 'USA'",
+    "sql_baseline": "```sql\nSELECT name FROM conductor WHERE nationality != 'USA';\n```",
+    "sql_memory_A": "SELECT name FROM conductor WHERE nationality != \"USA\"",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor\nWHERE conductor.nationality != \"USA\"\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Return the names of conductors that do not have the nationality \"USA\".",
+    "gold_sql": "SELECT Name FROM conductor WHERE Nationality != 'USA'",
+    "sql_baseline": "```sql\nSELECT name FROM conductor WHERE nationality != 'USA';\n```",
+    "sql_memory_A": "SELECT name FROM conductor WHERE nationality != 'USA'",
+    "sql_memory_B": "SELECT name\nFROM conductor\nWHERE nationality != 'USA'\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the record companies of orchestras in descending order of years in which they were founded?",
+    "gold_sql": "SELECT Record_Company FROM orchestra ORDER BY Year_of_Founded DESC",
+    "sql_baseline": "```sql\nSELECT DISTINCT record_company \nFROM orchestra \nORDER BY year_of_founded DESC;\n```",
+    "sql_memory_A": "SELECT record_company FROM orchestra ORDER BY year_of_founded DESC;",
+    "sql_memory_B": "SELECT orchestra.record_company\nFROM orchestra\nORDER BY orchestra.year_of_founded DESC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Return the record companies of orchestras, sorted descending by the years in which they were founded.",
+    "gold_sql": "SELECT Record_Company FROM orchestra ORDER BY Year_of_Founded DESC",
+    "sql_baseline": "```sql\nSELECT record_company FROM orchestra ORDER BY year_of_founded DESC;\n```",
+    "sql_memory_A": "SELECT record_company FROM orchestra ORDER BY year_of_founded DESC",
+    "sql_memory_B": "SELECT orchestra.record_company\nFROM orchestra\nORDER BY orchestra.year_of_founded DESC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What is the average attendance of shows?",
+    "gold_sql": "SELECT avg(Attendance) FROM SHOW",
+    "sql_baseline": "```sql\nSELECT AVG(attendance) AS average_attendance FROM show;\n```",
+    "sql_memory_A": "SELECT AVG(attendance) FROM show",
+    "sql_memory_B": "SELECT avg(show.attendance)\nFROM show\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Return the average attendance across all shows.",
+    "gold_sql": "SELECT avg(Attendance) FROM SHOW",
+    "sql_baseline": "```sql\nSELECT AVG(attendance) AS average_attendance FROM show;\n```",
+    "sql_memory_A": "SELECT AVG(attendance) FROM show;",
+    "sql_memory_B": "SELECT avg(show.attendance) \nFROM show \nWHERE NONE \nGROUP BY NONE \nORDER BY NONE \nHAVING NONE \nLIMIT NONE \nINTERSECT NONE \nEXCEPT NONE \nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the maximum and minimum share of performances whose type is not \"Live final\".",
+    "gold_sql": "SELECT max(SHARE) ,  min(SHARE) FROM performance WHERE TYPE != \"Live final\"",
+    "sql_baseline": "```sql\nSELECT MAX(share) AS max_share, MIN(share) AS min_share\nFROM performance\nWHERE type != 'Live final';\n```",
+    "sql_memory_A": "SELECT MAX(share) AS max_share, MIN(share) AS min_share FROM performance WHERE type != 'Live final'",
+    "sql_memory_B": "SELECT MAX(performance.share) AS max_share, MIN(performance.share) AS min_share\nFROM performance\nWHERE performance.type != 'Live final'"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Return the maximum and minimum shares for performances that do not have the type \"Live final\".",
+    "gold_sql": "SELECT max(SHARE) ,  min(SHARE) FROM performance WHERE TYPE != \"Live final\"",
+    "sql_baseline": "```sql\nSELECT MAX(share) AS max_share, MIN(share) AS min_share\nFROM performance\nWHERE type != 'Live final';\n```",
+    "sql_memory_A": "SELECT MAX(share) AS max_share, MIN(share) AS min_share FROM performance WHERE type != 'Live final'",
+    "sql_memory_B": "SELECT MAX(share) AS max_share, MIN(share) AS min_share\nFROM performance\nWHERE type != 'Live final'\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "How many different nationalities do conductors have?",
+    "gold_sql": "SELECT count(DISTINCT Nationality) FROM conductor",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT nationality) AS different_nationalities FROM conductor;\n```",
+    "sql_memory_A": "SELECT COUNT(DISTINCT nationality) FROM conductor;",
+    "sql_memory_B": "SELECT COUNT(DISTINCT nationality) FROM conductor;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Count the number of different nationalities of conductors.",
+    "gold_sql": "SELECT count(DISTINCT Nationality) FROM conductor",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT nationality) AS different_nationalities FROM conductor;\n```",
+    "sql_memory_A": "SELECT count(DISTINCT nationality) FROM conductor",
+    "sql_memory_B": "SELECT count( DISTINCT conductor.nationality )\nFROM conductor\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "List names of conductors in descending order of years of work.",
+    "gold_sql": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC",
+    "sql_baseline": "```sql\nSELECT name FROM conductor ORDER BY year_of_work DESC;\n```",
+    "sql_memory_A": "SELECT name FROM conductor ORDER BY year_of_work DESC",
+    "sql_memory_B": "SELECT name\nFROM conductor\nORDER BY year_of_work DESC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the names of conductors, sorted descending by the number of years they have worked?",
+    "gold_sql": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC",
+    "sql_baseline": "```sql\nSELECT name \nFROM conductor \nORDER BY year_of_work DESC;\n```",
+    "sql_memory_A": "SELECT name FROM conductor ORDER BY year_of_work DESC",
+    "sql_memory_B": "SELECT name\nFROM conductor\nORDER BY year_of_work DESC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "List the name of the conductor with the most years of work.",
+    "gold_sql": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT name \nFROM conductor \nORDER BY year_of_work DESC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT name FROM conductor ORDER BY year_of_work DESC LIMIT 1;",
+    "sql_memory_B": "SELECT name\nFROM conductor\nORDER BY year_of_work DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What is the name of the conductor who has worked the greatest number of years?",
+    "gold_sql": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT name \nFROM conductor \nORDER BY year_of_work DESC \nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT name FROM conductor ORDER BY year_of_work DESC LIMIT 1",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor\nORDER BY conductor.year_of_work DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Show the names of conductors and the orchestras they have conducted.",
+    "gold_sql": "SELECT T1.Name ,  T2.Orchestra FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID",
+    "sql_baseline": "```sql\nSELECT c.name AS conductor_name, o.orchestra AS orchestra_name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id;\n```",
+    "sql_memory_A": "SELECT c.name, o.orchestra FROM conductor AS c JOIN orchestra AS o ON c.conductor_id = o.conductor_id",
+    "sql_memory_B": "SELECT conductor.name, orchestra.orchestra\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nORDER BY conductor.name, orchestra.orchestra ASC"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the names of conductors as well as the corresonding orchestras that they have conducted?",
+    "gold_sql": "SELECT T1.Name ,  T2.Orchestra FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID",
+    "sql_baseline": "```sql\nSELECT c.name AS conductor_name, o.orchestra AS orchestra_name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id;\n```",
+    "sql_memory_A": "SELECT T1.name, T2.orchestra FROM conductor AS T1 JOIN orchestra AS T2 ON T1.conductor_id = T2.conductor_id",
+    "sql_memory_B": "SELECT conductor.name, orchestra.orchestra\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Show the names of conductors that have conducted more than one orchestras.",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID GROUP BY T2.Conductor_ID HAVING COUNT(*)  >  1",
+    "sql_baseline": "```sql\nSELECT c.name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id\nGROUP BY c.conductor_id\nHAVING COUNT(DISTINCT o.orchestra_id) > 1;\n```",
+    "sql_memory_A": "SELECT T1.name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.conductor_id = T2.conductor_id GROUP BY T1.conductor_id HAVING COUNT(T2.orchestra_id) > 1",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nGROUP BY conductor.conductor_id\nHAVING COUNT(DISTINCT orchestra.orchestra_id) > 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the names of conductors who have conducted at more than one orchestra?",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID GROUP BY T2.Conductor_ID HAVING COUNT(*)  >  1",
+    "sql_baseline": "```sql\nSELECT c.name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id\nGROUP BY c.conductor_id\nHAVING COUNT(DISTINCT o.orchestra_id) > 1;\n```",
+    "sql_memory_A": "SELECT T1.name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.conductor_id = T2.conductor_id GROUP BY T1.conductor_id HAVING COUNT(DISTINCT T2.orchestra_id) > 1",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nGROUP BY conductor.conductor_id\nHAVING COUNT(DISTINCT orchestra.orchestra_id) > 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Show the name of the conductor that has conducted the most number of orchestras.",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID GROUP BY T2.Conductor_ID ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT c.name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id\nGROUP BY c.conductor_id\nORDER BY COUNT(o.orchestra_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT T1.name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.conductor_id = T2.conductor_id GROUP BY T1.conductor_id ORDER BY count(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor\nJOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nGROUP BY conductor.conductor_id\nORDER BY count(*) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What is the name of the conductor who has conducted the most orchestras?",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID GROUP BY T2.Conductor_ID ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT c.name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id\nGROUP BY c.conductor_id\nORDER BY COUNT(o.orchestra_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT T1.name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.conductor_id = T2.conductor_id GROUP BY T1.conductor_id ORDER BY count(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT conductor.name\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nGROUP BY conductor.conductor_id\nORDER BY count(orchestra.orchestra_id) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Please show the name of the conductor that has conducted orchestras founded after 2008.",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID WHERE Year_of_Founded  >  2008",
+    "sql_baseline": "```sql\nSELECT DISTINCT c.name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id\nWHERE o.year_of_founded > 2008;\n```",
+    "sql_memory_A": "SELECT DISTINCT T1.name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.conductor_id = T2.conductor_id WHERE T2.year_of_founded > 2008",
+    "sql_memory_B": "SELECT DISTINCT conductor.name\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nWHERE orchestra.year_of_founded > 2008"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the names of conductors who have conducted orchestras founded after the year 2008?",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID WHERE Year_of_Founded  >  2008",
+    "sql_baseline": "```sql\nSELECT DISTINCT c.name\nFROM conductor c\nJOIN orchestra o ON c.conductor_id = o.conductor_id\nWHERE o.year_of_founded > 2008;\n```",
+    "sql_memory_A": "SELECT DISTINCT C.name FROM conductor AS C JOIN orchestra AS O ON C.conductor_id = O.conductor_id WHERE O.year_of_founded > 2008",
+    "sql_memory_B": "SELECT DISTINCT conductor.name\nFROM conductor JOIN orchestra ON conductor.conductor_id = orchestra.conductor_id\nWHERE orchestra.year_of_founded > 2008"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Please show the different record companies and the corresponding number of orchestras.",
+    "gold_sql": "SELECT Record_Company ,  COUNT(*) FROM orchestra GROUP BY Record_Company",
+    "sql_baseline": "```sql\nSELECT record_company, COUNT(*) AS number_of_orchestras\nFROM orchestra\nGROUP BY record_company;\n```",
+    "sql_memory_A": "SELECT record_company, COUNT(*) FROM orchestra GROUP BY record_company",
+    "sql_memory_B": "SELECT orchestra.record_company, count(*)\nFROM orchestra\nGROUP BY orchestra.record_company\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "How many orchestras does each record company manage?",
+    "gold_sql": "SELECT Record_Company ,  COUNT(*) FROM orchestra GROUP BY Record_Company",
+    "sql_baseline": "```sql\nSELECT record_company, COUNT(*) AS orchestra_count\nFROM orchestra\nGROUP BY record_company;\n```",
+    "sql_memory_A": "SELECT record_company, COUNT(*) FROM orchestra GROUP BY record_company;",
+    "sql_memory_B": "SELECT orchestra.record_company, count(*)\nFROM orchestra\nGROUP BY orchestra.record_company\nORDER BY count(*) ASC;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Please show the record formats of orchestras in ascending order of count.",
+    "gold_sql": "SELECT Major_Record_Format FROM orchestra GROUP BY Major_Record_Format ORDER BY COUNT(*) ASC",
+    "sql_baseline": "```sql\nSELECT major_record_format, COUNT(*) AS count\nFROM orchestra\nGROUP BY major_record_format\nORDER BY count ASC;\n```",
+    "sql_memory_A": "SELECT major_record_format FROM orchestra ORDER BY major_record_format;",
+    "sql_memory_B": "SELECT orchestra.major_record_format\nFROM orchestra\nGROUP BY orchestra.major_record_format\nORDER BY COUNT(orchestra.major_record_format) ASC\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the major record formats of orchestras, sorted by their frequency?",
+    "gold_sql": "SELECT Major_Record_Format FROM orchestra GROUP BY Major_Record_Format ORDER BY COUNT(*) ASC",
+    "sql_baseline": "```sql\nSELECT major_record_format, COUNT(*) AS frequency\nFROM orchestra\nGROUP BY major_record_format\nORDER BY frequency DESC;\n```",
+    "sql_memory_A": "SELECT major_record_format, COUNT(*) FROM orchestra GROUP BY major_record_format ORDER BY COUNT(*) DESC;",
+    "sql_memory_B": "SELECT major_record_format, count(*) \nFROM orchestra \nGROUP BY major_record_format \nORDER BY count(*) DESC;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "List the record company shared by the most number of orchestras.",
+    "gold_sql": "SELECT Record_Company FROM orchestra GROUP BY Record_Company ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT record_company\nFROM orchestra\nGROUP BY record_company\nORDER BY COUNT(orchestra_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT record_company, COUNT(*) AS orchestra_count FROM orchestra GROUP BY record_company ORDER BY orchestra_count DESC LIMIT 1;",
+    "sql_memory_B": "SELECT orchestra.record_company, COUNT(*) AS orchestra_count\nFROM orchestra\nGROUP BY orchestra.record_company\nORDER BY orchestra_count DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What is the record company used by the greatest number of orchestras?",
+    "gold_sql": "SELECT Record_Company FROM orchestra GROUP BY Record_Company ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT record_company\nFROM orchestra\nGROUP BY record_company\nORDER BY COUNT(orchestra_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT record_company, COUNT(*) AS orchestra_count FROM orchestra GROUP BY record_company ORDER BY orchestra_count DESC LIMIT 1;",
+    "sql_memory_B": "SELECT orchestra.record_company, count(*)\nFROM orchestra\nGROUP BY orchestra.record_company\nORDER BY count(*) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "List the names of orchestras that have no performance.",
+    "gold_sql": "SELECT Orchestra FROM orchestra WHERE Orchestra_ID NOT IN (SELECT Orchestra_ID FROM performance)",
+    "sql_baseline": "```sql\nSELECT orchestra\nFROM orchestra\nWHERE orchestra_id NOT IN (SELECT DISTINCT orchestra_id FROM performance);\n```",
+    "sql_memory_A": "SELECT orchestra FROM orchestra WHERE orchestra_id NOT IN (SELECT orchestra_id FROM performance)",
+    "sql_memory_B": "SELECT orchestra.orchestra\nFROM orchestra\nLEFT JOIN performance ON orchestra.orchestra_id = performance.orchestra_id\nWHERE performance.performance_id IS NULL\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the orchestras that do not have any performances?",
+    "gold_sql": "SELECT Orchestra FROM orchestra WHERE Orchestra_ID NOT IN (SELECT Orchestra_ID FROM performance)",
+    "sql_baseline": "```sql\nSELECT orchestra.orchestra \nFROM orchestra \nLEFT JOIN performance ON orchestra.orchestra_id = performance.orchestra_id \nWHERE performance.performance_id IS NULL;\n```",
+    "sql_memory_A": "SELECT T1.orchestra FROM orchestra AS T1 LEFT JOIN performance AS T2 ON T1.orchestra_id = T2.orchestra_id WHERE T2.performance_id IS NULL",
+    "sql_memory_B": "SELECT orchestra.orchestra\nFROM orchestra\nLEFT JOIN performance ON orchestra.orchestra_id = performance.orchestra_id\nWHERE performance.performance_id IS NULL;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Show the record companies shared by orchestras founded before 2003 and after 2003.",
+    "gold_sql": "SELECT Record_Company FROM orchestra WHERE Year_of_Founded  <  2003 INTERSECT SELECT Record_Company FROM orchestra WHERE Year_of_Founded  >  2003",
+    "sql_baseline": "```sql\nSELECT DISTINCT o1.record_company\nFROM orchestra o1\nJOIN orchestra o2 ON o1.record_company = o2.record_company\nWHERE o1.year_of_founded < 2003 AND o2.year_of_founded > 2003;\n```",
+    "sql_memory_A": "SELECT record_company FROM orchestra WHERE year_of_founded < 2003 UNION SELECT record_company FROM orchestra WHERE year_of_founded > 2003",
+    "sql_memory_B": "SELECT DISTINCT orchestra.record_company\nFROM orchestra\nWHERE orchestra.year_of_founded < 2003\nINTERSECT\nSELECT DISTINCT orchestra.record_company\nFROM orchestra\nWHERE orchestra.year_of_founded > 2003;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are the record companies that are used by both orchestras founded before 2003 and those founded after 2003?",
+    "gold_sql": "SELECT Record_Company FROM orchestra WHERE Year_of_Founded  <  2003 INTERSECT SELECT Record_Company FROM orchestra WHERE Year_of_Founded  >  2003",
+    "sql_baseline": "```sql\nSELECT DISTINCT o1.record_company\nFROM orchestra o1\nJOIN orchestra o2 ON o1.record_company = o2.record_company\nWHERE o1.year_of_founded < 2003 AND o2.year_of_founded >= 2003;\n```",
+    "sql_memory_A": "SELECT DISTINCT o1.record_company FROM orchestra o1 JOIN orchestra o2 ON o1.record_company = o2.record_company WHERE o1.year_of_founded < 2003 AND o2.year_of_founded > 2003;",
+    "sql_memory_B": "SELECT orchestra.record_company\nFROM orchestra\nWHERE orchestra.year_of_founded < 2003\nINTERSECT\nSELECT orchestra.record_company\nFROM orchestra\nWHERE orchestra.year_of_founded >= 2003;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Find the number of orchestras whose record format is \"CD\" or \"DVD\".",
+    "gold_sql": "SELECT COUNT(*) FROM orchestra WHERE Major_Record_Format  =  \"CD\" OR Major_Record_Format  =  \"DVD\"",
+    "sql_baseline": "```sql\nSELECT COUNT(*) \nFROM orchestra \nWHERE major_record_format IN ('CD', 'DVD');\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM orchestra WHERE major_record_format IN ('CD', 'DVD');",
+    "sql_memory_B": "SELECT count( * )\nFROM orchestra\nWHERE orchestra.major_record_format IN (\"CD\", \"DVD\")"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Count the number of orchestras that have CD or DVD as their record format.",
+    "gold_sql": "SELECT COUNT(*) FROM orchestra WHERE Major_Record_Format  =  \"CD\" OR Major_Record_Format  =  \"DVD\"",
+    "sql_baseline": "```sql\nSELECT COUNT(*) \nFROM orchestra \nWHERE major_record_format IN ('CD', 'DVD');\n```",
+    "sql_memory_A": "SELECT count(*) FROM orchestra WHERE major_record_format IN ('CD', 'DVD');",
+    "sql_memory_B": "SELECT count( DISTINCT orchestra.orchestra_id )\nFROM orchestra\nWHERE orchestra.major_record_format IN ('CD', 'DVD')\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "Show the years in which orchestras that have given more than one performance are founded.",
+    "gold_sql": "SELECT Year_of_Founded FROM orchestra AS T1 JOIN performance AS T2 ON T1.Orchestra_ID  =  T2.Orchestra_ID GROUP BY T2.Orchestra_ID HAVING COUNT(*)  >  1",
+    "sql_baseline": "```sql\nSELECT DISTINCT o.year_of_founded\nFROM orchestra o\nJOIN performance p ON o.orchestra_id = p.orchestra_id\nGROUP BY o.orchestra_id\nHAVING COUNT(p.performance_id) > 1;\n```",
+    "sql_memory_A": "SELECT DISTINCT o.year_of_founded FROM orchestra AS o JOIN performance AS p ON o.orchestra_id = p.orchestra_id GROUP BY o.orchestra_id HAVING COUNT(p.performance_id) > 1",
+    "sql_memory_B": "SELECT DISTINCT o.year_of_founded\nFROM orchestra o\nJOIN performance p ON o.orchestra_id = p.orchestra_id\nGROUP BY o.orchestra_id\nHAVING COUNT(p.performance_id) > 1\nORDER BY o.year_of_founded ASC;"
+  },
+  {
+    "db_id": "orchestra",
+    "question": "What are years of founding for orchestras that have had more than a single performance?",
+    "gold_sql": "SELECT Year_of_Founded FROM orchestra AS T1 JOIN performance AS T2 ON T1.Orchestra_ID  =  T2.Orchestra_ID GROUP BY T2.Orchestra_ID HAVING COUNT(*)  >  1",
+    "sql_baseline": "```sql\nSELECT o.year_of_founded\nFROM orchestra o\nJOIN performance p ON o.orchestra_id = p.orchestra_id\nGROUP BY o.orchestra_id\nHAVING COUNT(p.performance_id) > 1;\n```",
+    "sql_memory_A": "SELECT o.year_of_founded FROM orchestra AS o JOIN performance AS p ON o.orchestra_id = p.orchestra_id GROUP BY o.orchestra_id HAVING COUNT(p.performance_id) > 1",
+    "sql_memory_B": "SELECT orchestra.year_of_founded\nFROM orchestra JOIN performance ON orchestra.orchestra_id = performance.orchestra_id\nGROUP BY orchestra.orchestra_id\nHAVING COUNT(performance.performance_id) > 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "How many employees are there?",
+    "gold_sql": "SELECT count(*) FROM employee",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS total_employees FROM employee;\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM employee",
+    "sql_memory_B": "SELECT count(*)\nFROM employee\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Count the number of employees",
+    "gold_sql": "SELECT count(*) FROM employee",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS employee_count FROM employee;\n```",
+    "sql_memory_A": "SELECT count(*) FROM employee",
+    "sql_memory_B": "SELECT count( * )\nFROM employee\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Sort employee names by their age in ascending order.",
+    "gold_sql": "SELECT name FROM employee ORDER BY age",
+    "sql_baseline": "```sql\nSELECT name FROM employee ORDER BY age ASC;\n```",
+    "sql_memory_A": "SELECT name FROM employee ORDER BY age ASC",
+    "sql_memory_B": "SELECT employee.name\nFROM employee\nWHERE NONE\nGROUP BY NONE\nORDER BY employee.age ASC\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "List the names of employees and sort in ascending order of age.",
+    "gold_sql": "SELECT name FROM employee ORDER BY age",
+    "sql_baseline": "```sql\nSELECT name FROM employee ORDER BY age ASC;\n```",
+    "sql_memory_A": "SELECT name FROM employee ORDER BY age ASC",
+    "sql_memory_B": "SELECT employee.name\nFROM employee\nORDER BY employee.age ASC"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What is the number of employees from each city?",
+    "gold_sql": "SELECT count(*) ,  city FROM employee GROUP BY city",
+    "sql_baseline": "```sql\nSELECT city, COUNT(*) AS number_of_employees\nFROM employee\nGROUP BY city;\n```",
+    "sql_memory_A": "SELECT city, COUNT(*) FROM employee GROUP BY city",
+    "sql_memory_B": "SELECT city, count(*)\nFROM employee\nGROUP BY city\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Count the number of employees for each city.",
+    "gold_sql": "SELECT count(*) ,  city FROM employee GROUP BY city",
+    "sql_baseline": "```sql\nSELECT city, COUNT(*) AS employee_count\nFROM employee\nGROUP BY city;\n```",
+    "sql_memory_A": "SELECT city, count(*) FROM employee GROUP BY city",
+    "sql_memory_B": "SELECT count(*), employee.city\nFROM employee\nGROUP BY employee.city\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which cities do more than one employee under age 30 come from?",
+    "gold_sql": "SELECT city FROM employee WHERE age  <  30 GROUP BY city HAVING count(*)  >  1",
+    "sql_baseline": "```sql\nSELECT city\nFROM employee\nWHERE age < 30\nGROUP BY city\nHAVING COUNT(employee_id) > 1;\n```",
+    "sql_memory_A": "SELECT city FROM employee WHERE age < 30 GROUP BY city HAVING COUNT(employee_id) > 1",
+    "sql_memory_B": "SELECT employee.city\nFROM employee\nWHERE employee.age < 30\nGROUP BY employee.city\nHAVING count(employee.employee_id) > 1;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the cities that have more than one employee under age 30.",
+    "gold_sql": "SELECT city FROM employee WHERE age  <  30 GROUP BY city HAVING count(*)  >  1",
+    "sql_baseline": "```sql\nSELECT city\nFROM employee\nWHERE age < 30\nGROUP BY city\nHAVING COUNT(employee_id) > 1;\n```",
+    "sql_memory_A": "SELECT city FROM employee WHERE age < 30 GROUP BY city HAVING COUNT(employee_id) > 1",
+    "sql_memory_B": "SELECT city\nFROM employee\nWHERE age < 30\nGROUP BY city\nHAVING COUNT(employee_id) > 1;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the number of shops in each location.",
+    "gold_sql": "SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION",
+    "sql_baseline": "```sql\nSELECT location, COUNT(*) AS number_of_shops\nFROM shop\nGROUP BY location;\n```",
+    "sql_memory_A": "SELECT location, count(*) FROM shop GROUP BY location",
+    "sql_memory_B": "SELECT location, count( * )\nFROM shop\nGROUP BY location\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "How many shops are there in each location?",
+    "gold_sql": "SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION",
+    "sql_baseline": "```sql\nSELECT location, COUNT(*) AS shop_count\nFROM shop\nGROUP BY location;\n```",
+    "sql_memory_A": "SELECT location, count(*) FROM shop GROUP BY location",
+    "sql_memory_B": "SELECT location, count(*)\nFROM shop\nGROUP BY location\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the manager name and district of the shop whose number of products is the largest.",
+    "gold_sql": "SELECT manager_name ,  district FROM shop ORDER BY number_products DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT s.manager_name, s.district\nFROM shop s\nWHERE s.number_products = (SELECT MAX(number_products) FROM shop);\n```",
+    "sql_memory_A": "SELECT manager_name, district FROM shop ORDER BY number_products DESC LIMIT 1",
+    "sql_memory_B": "SELECT shop.manager_name, shop.district\nFROM shop\nWHERE NONE\nORDER BY shop.number_products DESC\nLIMIT 1\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What are the manager name and district of the shop that sells the largest number of products?",
+    "gold_sql": "SELECT manager_name ,  district FROM shop ORDER BY number_products DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT s.manager_name, s.district\nFROM shop s\nORDER BY s.number_products DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT manager_name, district FROM shop ORDER BY number_products DESC LIMIT 1",
+    "sql_memory_B": "SELECT shop.manager_name, shop.district\nFROM shop\nORDER BY shop.number_products DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "find the minimum and maximum number of products of all stores.",
+    "gold_sql": "SELECT min(Number_products) ,  max(Number_products) FROM shop",
+    "sql_baseline": "```sql\nSELECT MIN(number_products) AS min_products, MAX(number_products) AS max_products FROM shop;\n```",
+    "sql_memory_A": "SELECT min(number_products), max(number_products) FROM shop;",
+    "sql_memory_B": "SELECT min( shop.number_products ), max( shop.number_products )\nFROM shop\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What are the minimum and maximum number of products across all the shops?",
+    "gold_sql": "SELECT min(Number_products) ,  max(Number_products) FROM shop",
+    "sql_baseline": "```sql\nSELECT MIN(number_products) AS min_products, MAX(number_products) AS max_products FROM shop;\n```",
+    "sql_memory_A": "SELECT min(number_products), max(number_products) FROM shop;",
+    "sql_memory_B": "SELECT min(shop.number_products), max(shop.number_products)\nFROM shop\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Return the name, location and district of all shops in descending order of number of products.",
+    "gold_sql": "SELECT name ,  LOCATION ,  district FROM shop ORDER BY number_products DESC",
+    "sql_baseline": "```sql\nSELECT name, location, district FROM shop ORDER BY number_products DESC;\n```",
+    "sql_memory_A": "SELECT name, location, district FROM shop ORDER BY number_products DESC",
+    "sql_memory_B": "SELECT shop.name, shop.location, shop.district\nFROM shop\nWHERE NONE\nGROUP BY NONE\nORDER BY shop.number_products DESC\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Sort all the shops by number products in descending order, and return the name, location and district of each shop.",
+    "gold_sql": "SELECT name ,  LOCATION ,  district FROM shop ORDER BY number_products DESC",
+    "sql_baseline": "```sql\nSELECT name, location, district FROM shop ORDER BY number_products DESC;\n```",
+    "sql_memory_A": "SELECT name, location, district FROM shop ORDER BY number_products DESC",
+    "sql_memory_B": "SELECT shop.name, shop.location, shop.district\nFROM shop\nWHERE NONE\nGROUP BY NONE\nORDER BY shop.number_products DESC\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the names of stores whose number products is more than the average number of products.",
+    "gold_sql": "SELECT name FROM shop WHERE number_products  >  (SELECT avg(number_products) FROM shop)",
+    "sql_baseline": "```sql\nSELECT name FROM shop WHERE number_products > (SELECT AVG(number_products) FROM shop);\n```",
+    "sql_memory_A": "SELECT name FROM shop GROUP BY name HAVING number_products > (SELECT avg(number_products) FROM shop)",
+    "sql_memory_B": "SELECT shop.name\nFROM shop\nWHERE NONE\nGROUP BY shop.name\nHAVING shop.number_products > (SELECT avg(shop.number_products) FROM shop)\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which shops' number products is above the average? Give me the shop names.",
+    "gold_sql": "SELECT name FROM shop WHERE number_products  >  (SELECT avg(number_products) FROM shop)",
+    "sql_baseline": "```sql\nSELECT name FROM shop WHERE number_products > (SELECT AVG(number_products) FROM shop);\n```",
+    "sql_memory_A": "SELECT name FROM shop WHERE number_products > (SELECT avg(number_products) FROM shop)",
+    "sql_memory_B": "SELECT shop.name\nFROM shop\nWHERE shop.number_products > (SELECT avg(shop.number_products) FROM shop)\nORDER BY shop.name;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "find the name of employee who was awarded the most times in the evaluation.",
+    "gold_sql": "SELECT t1.name FROM employee AS t1 JOIN evaluation AS t2 ON t1.Employee_ID  =  t2.Employee_ID GROUP BY t2.Employee_ID ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT e.name\nFROM employee e\nJOIN evaluation ev ON e.employee_id = ev.employee_id\nGROUP BY e.employee_id\nORDER BY COUNT(ev.year_awarded) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT e.name FROM employee AS e JOIN evaluation AS ev ON e.employee_id = ev.employee_id GROUP BY e.employee_id ORDER BY COUNT(ev.year_awarded) DESC LIMIT 1",
+    "sql_memory_B": "SELECT employee.name\nFROM employee JOIN evaluation ON employee.employee_id = evaluation.employee_id\nGROUP BY employee.employee_id\nORDER BY COUNT(evaluation.year_awarded) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which employee received the most awards in evaluations? Give me the employee name.",
+    "gold_sql": "SELECT t1.name FROM employee AS t1 JOIN evaluation AS t2 ON t1.Employee_ID  =  t2.Employee_ID GROUP BY t2.Employee_ID ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT e.name\nFROM employee e\nJOIN evaluation ev ON e.employee_id = ev.employee_id\nGROUP BY e.employee_id\nORDER BY COUNT(ev.year_awarded) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT T1.name FROM employee AS T1 JOIN evaluation AS T2 ON T1.employee_id = T2.employee_id GROUP BY T1.employee_id ORDER BY count(*) DESC LIMIT 1;",
+    "sql_memory_B": "SELECT employee.name\nFROM employee JOIN evaluation ON employee.employee_id = evaluation.employee_id\nGROUP BY employee.employee_id\nORDER BY count(*) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the name of the employee who got the highest one time bonus.",
+    "gold_sql": "SELECT t1.name FROM employee AS t1 JOIN evaluation AS t2 ON t1.Employee_ID  =  t2.Employee_ID ORDER BY t2.bonus DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT e.name\nFROM employee e\nJOIN evaluation ev ON e.employee_id = ev.employee_id\nWHERE ev.bonus = (SELECT MAX(bonus) FROM evaluation)\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT e.name FROM employee AS e JOIN evaluation AS ev ON e.employee_id = ev.employee_id ORDER BY ev.bonus DESC LIMIT 1",
+    "sql_memory_B": "SELECT employee.name\nFROM employee JOIN evaluation ON employee.employee_id = evaluation.employee_id\nORDER BY evaluation.bonus DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which employee received the biggest bonus? Give me the employee name.",
+    "gold_sql": "SELECT t1.name FROM employee AS t1 JOIN evaluation AS t2 ON t1.Employee_ID  =  t2.Employee_ID ORDER BY t2.bonus DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT e.name\nFROM employee e\nJOIN evaluation ev ON e.employee_id = ev.employee_id\nORDER BY ev.bonus DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT name FROM employee WHERE employee_id = (SELECT employee_id FROM evaluation ORDER BY bonus DESC LIMIT 1)",
+    "sql_memory_B": "SELECT employee.name\nFROM employee\nWHERE employee.employee_id = (SELECT evaluation.employee_id\n                              FROM evaluation\n                              ORDER BY evaluation.bonus DESC\n                              LIMIT 1)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the names of employees who never won any award in the evaluation.",
+    "gold_sql": "SELECT name FROM employee WHERE Employee_ID NOT IN (SELECT Employee_ID FROM evaluation)",
+    "sql_baseline": "```sql\nSELECT name \nFROM employee \nWHERE employee_id NOT IN (SELECT employee_id FROM evaluation);\n```",
+    "sql_memory_A": "SELECT name FROM employee WHERE employee_id NOT IN (SELECT employee_id FROM evaluation)",
+    "sql_memory_B": "SELECT employee.name\nFROM employee\nLEFT JOIN evaluation ON employee.employee_id = evaluation.employee_id\nWHERE evaluation.employee_id IS NULL\nGROUP BY employee.employee_id\nORDER BY NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What are the names of the employees who never received any evaluation?",
+    "gold_sql": "SELECT name FROM employee WHERE Employee_ID NOT IN (SELECT Employee_ID FROM evaluation)",
+    "sql_baseline": "```sql\nSELECT name \nFROM employee \nWHERE employee_id NOT IN (SELECT employee_id FROM evaluation);\n```",
+    "sql_memory_A": "SELECT name FROM employee EXCEPT SELECT e.name FROM employee AS e JOIN evaluation AS ev ON e.employee_id = ev.employee_id",
+    "sql_memory_B": "SELECT employee.name\nFROM employee\nWHERE employee.employee_id NOT IN (SELECT evaluation.employee_id FROM evaluation)\nGROUP BY NONE\nORDER BY NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What is the name of the shop that is hiring the largest number of employees?",
+    "gold_sql": "SELECT t2.name FROM hiring AS t1 JOIN shop AS t2 ON t1.shop_id  =  t2.shop_id GROUP BY t1.shop_id ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT s.name\nFROM shop s\nJOIN hiring h ON s.shop_id = h.shop_id\nGROUP BY s.shop_id\nORDER BY COUNT(h.employee_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT shop_id FROM hiring GROUP BY shop_id ORDER BY count(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT shop.name\nFROM shop\nJOIN hiring ON shop.shop_id = hiring.shop_id\nGROUP BY shop.shop_id\nORDER BY COUNT(hiring.employee_id) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which shop has the most employees? Give me the shop name.",
+    "gold_sql": "SELECT t2.name FROM hiring AS t1 JOIN shop AS t2 ON t1.shop_id  =  t2.shop_id GROUP BY t1.shop_id ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT s.name\nFROM shop s\nJOIN hiring h ON s.shop_id = h.shop_id\nGROUP BY s.shop_id\nORDER BY COUNT(h.employee_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT s.name FROM shop s JOIN hiring h ON s.shop_id = h.shop_id GROUP BY s.shop_id ORDER BY COUNT(h.employee_id) DESC LIMIT 1;",
+    "sql_memory_B": "SELECT shop.name\nFROM shop\nJOIN hiring ON shop.shop_id = hiring.shop_id\nGROUP BY shop.shop_id\nORDER BY count(hiring.employee_id) DESC\nLIMIT 1"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the name of the shops that do not hire any employee.",
+    "gold_sql": "SELECT name FROM shop WHERE shop_id NOT IN (SELECT shop_id FROM hiring)",
+    "sql_baseline": "```sql\nSELECT name FROM shop WHERE shop_id NOT IN (SELECT shop_id FROM hiring);\n```",
+    "sql_memory_A": "SELECT name FROM shop WHERE shop_id NOT IN (SELECT shop_id FROM hiring)",
+    "sql_memory_B": "SELECT shop.name\nFROM shop\nWHERE shop.shop_id NOT IN (SELECT hiring.shop_id FROM hiring)\nGROUP BY shop.name;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which shops run with no employees? Find the shop names",
+    "gold_sql": "SELECT name FROM shop WHERE shop_id NOT IN (SELECT shop_id FROM hiring)",
+    "sql_baseline": "```sql\nSELECT s.name \nFROM shop s \nLEFT JOIN hiring h ON s.shop_id = h.shop_id \nWHERE h.employee_id IS NULL;\n```",
+    "sql_memory_A": "SELECT name FROM shop WHERE shop_id NOT IN (SELECT shop_id FROM hiring)",
+    "sql_memory_B": "SELECT shop.name\nFROM shop\nWHERE shop.shop_id NOT IN (SELECT hiring.shop_id FROM hiring)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the number of employees hired in each shop; show the shop name as well.",
+    "gold_sql": "SELECT count(*) ,  t2.name FROM hiring AS t1 JOIN shop AS t2 ON t1.shop_id  =  t2.shop_id GROUP BY t2.name",
+    "sql_baseline": "```sql\nSELECT s.name AS shop_name, COUNT(h.employee_id) AS number_of_employees\nFROM shop s\nLEFT JOIN hiring h ON s.shop_id = h.shop_id\nGROUP BY s.shop_id;\n```",
+    "sql_memory_A": "SELECT shop.name, COUNT(hiring.employee_id) AS number_of_employees FROM hiring JOIN shop ON hiring.shop_id = shop.shop_id GROUP BY shop.name",
+    "sql_memory_B": "SELECT shop.name, COUNT(hiring.employee_id) AS number_of_employees\nFROM shop\nLEFT JOIN hiring ON shop.shop_id = hiring.shop_id\nGROUP BY shop.shop_id;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "For each shop, return the number of employees working there and the name of the shop.",
+    "gold_sql": "SELECT count(*) ,  t2.name FROM hiring AS t1 JOIN shop AS t2 ON t1.shop_id  =  t2.shop_id GROUP BY t2.name",
+    "sql_baseline": "```sql\nSELECT s.name AS shop_name, COUNT(h.employee_id) AS number_of_employees\nFROM shop s\nLEFT JOIN hiring h ON s.shop_id = h.shop_id\nGROUP BY s.shop_id;\n```",
+    "sql_memory_A": "SELECT shop.name, COUNT(hiring.employee_id) FROM shop LEFT JOIN hiring ON shop.shop_id = hiring.shop_id GROUP BY shop.name",
+    "sql_memory_B": "SELECT shop.name, count(hiring.employee_id)\nFROM shop LEFT JOIN hiring ON shop.shop_id = hiring.shop_id\nGROUP BY shop.name\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What is total bonus given in all evaluations?",
+    "gold_sql": "SELECT sum(bonus) FROM evaluation",
+    "sql_baseline": "```sql\nSELECT SUM(bonus) AS total_bonus FROM evaluation;\n```",
+    "sql_memory_A": "SELECT SUM(bonus) FROM evaluation",
+    "sql_memory_B": "SELECT sum(evaluation.bonus) FROM evaluation;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the total amount of bonus given in all the evaluations.",
+    "gold_sql": "SELECT sum(bonus) FROM evaluation",
+    "sql_baseline": "```sql\nSELECT SUM(bonus) AS total_bonus FROM evaluation;\n```",
+    "sql_memory_A": "SELECT sum(bonus) FROM evaluation",
+    "sql_memory_B": "SELECT sum(evaluation.bonus) FROM evaluation WHERE NONE GROUP BY NONE ORDER BY NONE HAVING NONE LIMIT NONE INTERSECT NONE EXCEPT NONE UNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Give me all the information about hiring.",
+    "gold_sql": "SELECT * FROM hiring",
+    "sql_baseline": "```sql\nSELECT * FROM hiring;\n```",
+    "sql_memory_A": "SELECT * FROM hiring",
+    "sql_memory_B": "SELECT *\nFROM hiring\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "What is all the information about hiring?",
+    "gold_sql": "SELECT * FROM hiring",
+    "sql_baseline": "```sql\nSELECT * FROM hiring;\n```",
+    "sql_memory_A": "SELECT * FROM hiring",
+    "sql_memory_B": "SELECT *\nFROM hiring\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Which district has both stores with less than 3000 products and stores with more than 10000 products?",
+    "gold_sql": "SELECT district FROM shop WHERE Number_products  <  3000 INTERSECT SELECT district FROM shop WHERE Number_products  >  10000",
+    "sql_baseline": "```sql\nSELECT DISTINCT s1.district\nFROM shop s1\nJOIN shop s2 ON s1.district = s2.district\nWHERE s1.number_products < 3000 AND s2.number_products > 10000;\n```",
+    "sql_memory_A": "SELECT district FROM shop WHERE number_products < 3000 INTERSECT SELECT district FROM shop WHERE number_products > 10000;",
+    "sql_memory_B": "SELECT shop.district\nFROM shop\nWHERE shop.number_products < 3000 OR shop.number_products > 10000\nGROUP BY shop.district\nHAVING COUNT(CASE WHEN shop.number_products < 3000 THEN 1 END) > 0 \n   AND COUNT(CASE WHEN shop.number_products > 10000 THEN 1 END) > 0;"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Find the districts in which there are both shops selling less than 3000 products and shops selling more than 10000 products.",
+    "gold_sql": "SELECT district FROM shop WHERE Number_products  <  3000 INTERSECT SELECT district FROM shop WHERE Number_products  >  10000",
+    "sql_baseline": "```sql\nSELECT DISTINCT s1.district\nFROM shop s1\nJOIN shop s2 ON s1.district = s2.district\nWHERE s1.number_products < 3000 AND s2.number_products > 10000;\n```",
+    "sql_memory_A": "SELECT DISTINCT T1.district FROM shop AS T1 WHERE T1.number_products < 3000 AND T1.district IN (SELECT T2.district FROM shop AS T2 WHERE T2.number_products > 10000)",
+    "sql_memory_B": "SELECT DISTINCT s1.district\nFROM shop s1 JOIN shop s2 ON s1.district = s2.district\nWHERE s1.number_products < 3000 AND s2.number_products > 10000"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "How many different store locations are there?",
+    "gold_sql": "SELECT count(DISTINCT LOCATION) FROM shop",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT location) AS different_store_locations FROM shop;\n```",
+    "sql_memory_A": "SELECT count(DISTINCT location) FROM shop",
+    "sql_memory_B": "SELECT count(DISTINCT location)\nFROM shop\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "db_id": "employee_hire_evaluation",
+    "question": "Count the number of distinct store locations.",
+    "gold_sql": "SELECT count(DISTINCT LOCATION) FROM shop",
+    "sql_baseline": "```sql\nSELECT COUNT(DISTINCT location) FROM shop;\n```",
+    "sql_memory_A": "SELECT count(DISTINCT location) FROM shop",
+    "sql_memory_B": "SELECT count( DISTINCT shop.location )\nFROM shop\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  }
+]

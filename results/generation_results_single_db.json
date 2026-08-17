@@ -1,0 +1,317 @@
+[
+  {
+    "question": "How many singers do we have?",
+    "gold_sql": "SELECT count(*) FROM singer",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS total_singers FROM singer;\n```",
+    "sql_memory_A": "SELECT count(*) FROM singer;",
+    "sql_memory_B": "SELECT count(*)\nFROM singer;"
+  },
+  {
+    "question": "What is the total number of singers?",
+    "gold_sql": "SELECT count(*) FROM singer",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS total_singers FROM singer;\n```",
+    "sql_memory_A": "SELECT count(*) FROM singer",
+    "sql_memory_B": "SELECT count(*)\nFROM singer\nWHERE NONE\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "Show name, country, age for all singers ordered by age from the oldest to the youngest.",
+    "gold_sql": "SELECT name ,  country ,  age FROM singer ORDER BY age DESC",
+    "sql_baseline": "```sql\nSELECT name, country, age FROM singer ORDER BY age DESC;\n```",
+    "sql_memory_A": "SELECT name, country, age FROM singer ORDER BY age DESC",
+    "sql_memory_B": "SELECT singer.name, singer.country, singer.age\nFROM singer\nORDER BY singer.age DESC"
+  },
+  {
+    "question": "What are the names, countries, and ages for every singer in descending order of age?",
+    "gold_sql": "SELECT name ,  country ,  age FROM singer ORDER BY age DESC",
+    "sql_baseline": "```sql\nSELECT name, country, age FROM singer ORDER BY age DESC;\n```",
+    "sql_memory_A": "SELECT name, country, age FROM singer ORDER BY age DESC",
+    "sql_memory_B": "SELECT name, country, age\nFROM singer\nORDER BY age DESC"
+  },
+  {
+    "question": "What is the average, minimum, and maximum age of all singers from France?",
+    "gold_sql": "SELECT avg(age) ,  min(age) ,  max(age) FROM singer WHERE country  =  'France'",
+    "sql_baseline": "```sql\nSELECT AVG(age) AS average_age, MIN(age) AS minimum_age, MAX(age) AS maximum_age \nFROM singer \nWHERE country = 'France';\n```",
+    "sql_memory_A": "SELECT AVG(age) AS average_age, MIN(age) AS minimum_age, MAX(age) AS maximum_age FROM singer WHERE country = 'France';",
+    "sql_memory_B": "SELECT AVG(age) AS average_age, MIN(age) AS minimum_age, MAX(age) AS maximum_age\nFROM singer\nWHERE country = 'France'"
+  },
+  {
+    "question": "What is the average, minimum, and maximum age for all French singers?",
+    "gold_sql": "SELECT avg(age) ,  min(age) ,  max(age) FROM singer WHERE country  =  'France'",
+    "sql_baseline": "```sql\nSELECT AVG(age) AS average_age, MIN(age) AS minimum_age, MAX(age) AS maximum_age\nFROM singer\nWHERE country = 'France';\n```",
+    "sql_memory_A": "SELECT AVG(age) AS average_age, MIN(age) AS minimum_age, MAX(age) AS maximum_age FROM singer WHERE country = 'France';",
+    "sql_memory_B": "SELECT AVG(age) AS average_age, MIN(age) AS minimum_age, MAX(age) AS maximum_age\nFROM singer\nWHERE country = 'France'"
+  },
+  {
+    "question": "Show the name and the release year of the song by the youngest singer.",
+    "gold_sql": "SELECT song_name ,  song_release_year FROM singer ORDER BY age LIMIT 1",
+    "sql_baseline": "```sql\nSELECT song_name, song_release_year \nFROM singer \nWHERE age = (SELECT MIN(age) FROM singer);\n```",
+    "sql_memory_A": "SELECT T1.song_name, T1.song_release_year FROM singer AS T1 ORDER BY T1.age DESC LIMIT 1;",
+    "sql_memory_B": "SELECT song_name, song_release_year\nFROM singer\nWHERE age = (SELECT MIN(age) FROM singer);"
+  },
+  {
+    "question": "What are the names and release years for all the songs of the youngest singer?",
+    "gold_sql": "SELECT song_name ,  song_release_year FROM singer ORDER BY age LIMIT 1",
+    "sql_baseline": "```sql\nSELECT s.song_name, s.song_release_year\nFROM singer s\nWHERE s.age = (SELECT MIN(age) FROM singer);\n```",
+    "sql_memory_A": "SELECT song_name, song_release_year FROM singer WHERE age = (SELECT MIN(age) FROM singer);",
+    "sql_memory_B": "SELECT song_name, song_release_year\nFROM singer JOIN singer_in_concert ON singer.singer_id = singer_in_concert.singer_id\nWHERE age = (SELECT MIN(age) FROM singer)\nORDER BY NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What are all distinct countries where singers above age 20 are from?",
+    "gold_sql": "SELECT DISTINCT country FROM singer WHERE age  >  20",
+    "sql_baseline": "```sql\nSELECT DISTINCT country FROM singer WHERE age > 20;\n```",
+    "sql_memory_A": "SELECT DISTINCT country FROM singer WHERE age > 20",
+    "sql_memory_B": "SELECT DISTINCT singer.country\nFROM singer\nWHERE singer.age > 20\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What are  the different countries with singers above age 20?",
+    "gold_sql": "SELECT DISTINCT country FROM singer WHERE age  >  20",
+    "sql_baseline": "```sql\nSELECT DISTINCT country FROM singer WHERE age > 20;\n```",
+    "sql_memory_A": "SELECT DISTINCT T2.country FROM singer AS T1 WHERE T1.age > 20",
+    "sql_memory_B": "SELECT DISTINCT singer.country\nFROM singer\nWHERE singer.age > 20;"
+  },
+  {
+    "question": "Show all countries and the number of singers in each country.",
+    "gold_sql": "SELECT country ,  count(*) FROM singer GROUP BY country",
+    "sql_baseline": "```sql\nSELECT country, COUNT(singer_id) AS number_of_singers\nFROM singer\nGROUP BY country;\n```",
+    "sql_memory_A": "SELECT country, COUNT(*) FROM singer GROUP BY country",
+    "sql_memory_B": "SELECT singer.country, count(*)\nFROM singer\nGROUP BY singer.country\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "How many singers are from each country?",
+    "gold_sql": "SELECT country ,  count(*) FROM singer GROUP BY country",
+    "sql_baseline": "```sql\nSELECT country, COUNT(*) AS singer_count\nFROM singer\nGROUP BY country;\n```",
+    "sql_memory_A": "SELECT country, count(*) FROM singer GROUP BY country;",
+    "sql_memory_B": "SELECT country, count(*)\nFROM singer\nGROUP BY country\nORDER BY count(*) DESC"
+  },
+  {
+    "question": "List all song names by singers above the average age.",
+    "gold_sql": "SELECT song_name FROM singer WHERE age  >  (SELECT avg(age) FROM singer)",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.song_name\nFROM singer s\nWHERE s.age > (SELECT AVG(age) FROM singer);\n```",
+    "sql_memory_A": "SELECT song_name FROM singer WHERE age > (SELECT AVG(age) FROM singer);",
+    "sql_memory_B": "SELECT singer.song_name\nFROM singer\nWHERE singer.age > (SELECT AVG(age) FROM singer)"
+  },
+  {
+    "question": "What are all the song names by singers who are older than average?",
+    "gold_sql": "SELECT song_name FROM singer WHERE age  >  (SELECT avg(age) FROM singer)",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.song_name\nFROM singer s\nWHERE s.age > (SELECT AVG(age) FROM singer);\n```",
+    "sql_memory_A": "SELECT song_name FROM singer WHERE age > (SELECT AVG(age) FROM singer);",
+    "sql_memory_B": "SELECT singer.song_name\nFROM singer\nWHERE singer.age > (SELECT AVG(age) FROM singer);"
+  },
+  {
+    "question": "Show location and name for all stadiums with a capacity between 5000 and 10000.",
+    "gold_sql": "SELECT LOCATION ,  name FROM stadium WHERE capacity BETWEEN 5000 AND 10000",
+    "sql_baseline": "```sql\nSELECT location, name FROM stadium WHERE capacity BETWEEN 5000 AND 10000;\n```",
+    "sql_memory_A": "SELECT location, name FROM stadium WHERE capacity BETWEEN 5000 AND 10000",
+    "sql_memory_B": "SELECT location, name\nFROM stadium\nWHERE capacity BETWEEN 5000 AND 10000;"
+  },
+  {
+    "question": "What are the locations and names of all stations with capacity between 5000 and 10000?",
+    "gold_sql": "SELECT LOCATION ,  name FROM stadium WHERE capacity BETWEEN 5000 AND 10000",
+    "sql_baseline": "```sql\nSELECT location, name FROM stadium WHERE capacity BETWEEN 5000 AND 10000;\n```",
+    "sql_memory_A": "SELECT location, name FROM stadium WHERE capacity BETWEEN 5000 AND 10000",
+    "sql_memory_B": "SELECT stadium.location, stadium.name\nFROM stadium\nWHERE stadium.capacity BETWEEN 5000 AND 10000;"
+  },
+  {
+    "question": "What is the maximum capacity and the average of all stadiums ?",
+    "gold_sql": "select max(capacity), average from stadium",
+    "sql_baseline": "```sql\nSELECT MAX(capacity) AS max_capacity, AVG(capacity) AS average_capacity FROM stadium;\n```",
+    "sql_memory_A": "SELECT max(capacity), avg(capacity) FROM stadium;",
+    "sql_memory_B": "SELECT max(stadium.capacity), avg(stadium.capacity) FROM stadium;"
+  },
+  {
+    "question": "What is the average and maximum capacities for all stadiums ?",
+    "gold_sql": "select avg(capacity) ,  max(capacity) from stadium",
+    "sql_baseline": "```sql\nSELECT AVG(capacity) AS average_capacity, MAX(capacity) AS maximum_capacity FROM stadium;\n```",
+    "sql_memory_A": "SELECT avg(capacity), max(capacity) FROM stadium",
+    "sql_memory_B": "SELECT avg(stadium.capacity), max(stadium.capacity) FROM stadium;"
+  },
+  {
+    "question": "What is the name and capacity for the stadium with highest average attendance?",
+    "gold_sql": "SELECT name ,  capacity FROM stadium ORDER BY average DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT name, capacity FROM stadium ORDER BY average DESC LIMIT 1;\n```",
+    "sql_memory_A": "SELECT name, capacity FROM stadium ORDER BY average DESC LIMIT 1;",
+    "sql_memory_B": "SELECT name, capacity \nFROM stadium \nORDER BY average DESC \nLIMIT 1"
+  },
+  {
+    "question": "What is the name and capacity for the stadium with the highest average attendance?",
+    "gold_sql": "SELECT name ,  capacity FROM stadium ORDER BY average DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT name, capacity \nFROM stadium \nWHERE average = (SELECT MAX(average) FROM stadium);\n```",
+    "sql_memory_A": "SELECT name, capacity FROM stadium ORDER BY average DESC LIMIT 1;",
+    "sql_memory_B": "SELECT name, capacity \nFROM stadium \nORDER BY average DESC \nLIMIT 1"
+  },
+  {
+    "question": "How many concerts are there in year 2014 or 2015?",
+    "gold_sql": "SELECT count(*) FROM concert WHERE YEAR  =  2014 OR YEAR  =  2015",
+    "sql_baseline": "```sql\nSELECT COUNT(*) FROM concert WHERE year IN (2014, 2015);\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM concert WHERE year IN (2014, 2015)",
+    "sql_memory_B": "SELECT count(*)\nFROM concert\nWHERE year IN (2014, 2015);"
+  },
+  {
+    "question": "How many concerts occurred in 2014 or 2015?",
+    "gold_sql": "SELECT count(*) FROM concert WHERE YEAR  =  2014 OR YEAR  =  2015",
+    "sql_baseline": "```sql\nSELECT COUNT(*) \nFROM concert \nWHERE year IN (2014, 2015);\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM concert WHERE year IN (2014, 2015)",
+    "sql_memory_B": "SELECT COUNT(*)\nFROM concert\nWHERE year IN (2014, 2015)"
+  },
+  {
+    "question": "Show the stadium name and the number of concerts in each stadium.",
+    "gold_sql": "SELECT T2.name ,  count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id GROUP BY T1.stadium_id",
+    "sql_baseline": "```sql\nSELECT s.name AS stadium_name, COUNT(c.concert_id) AS number_of_concerts\nFROM stadium s\nLEFT JOIN concert c ON s.stadium_id = c.stadium_id\nGROUP BY s.stadium_id;\n```",
+    "sql_memory_A": "SELECT T1.name, COUNT(*) FROM stadium AS T1 JOIN concert AS T2 ON T1.stadium_id = T2.stadium_id GROUP BY T1.name",
+    "sql_memory_B": "SELECT stadium.name, count(*)\nFROM stadium JOIN concert ON stadium.stadium_id = concert.stadium_id\nGROUP BY stadium.name"
+  },
+  {
+    "question": "For each stadium, how many concerts play there?",
+    "gold_sql": "SELECT T2.name ,  count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id GROUP BY T1.stadium_id",
+    "sql_baseline": "```sql\nSELECT s.name AS stadium_name, COUNT(c.concert_id) AS concert_count\nFROM stadium s\nLEFT JOIN concert c ON s.stadium_id = c.stadium_id\nGROUP BY s.stadium_id;\n```",
+    "sql_memory_A": "SELECT stadium.name, COUNT(concert.concert_id) FROM stadium LEFT JOIN concert ON stadium.stadium_id = concert.stadium_id GROUP BY stadium.name;",
+    "sql_memory_B": "SELECT stadium.name, count(*)\nFROM stadium JOIN concert ON stadium.stadium_id = concert.stadium_id\nGROUP BY stadium.name\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "Show the stadium name and capacity with most number of concerts in year 2014 or after.",
+    "gold_sql": "SELECT T2.name ,  T2.capacity FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.year  >=  2014 GROUP BY T2.stadium_id ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT s.name, s.capacity\nFROM stadium s\nJOIN concert c ON s.stadium_id = c.stadium_id\nWHERE c.year >= 2014\nGROUP BY s.stadium_id\nORDER BY COUNT(c.concert_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT S.name, S.capacity FROM stadium AS S JOIN concert AS C ON S.stadium_id = C.stadium_id WHERE C.year >= 2014 GROUP BY S.name ORDER BY COUNT(C.concert_id) DESC LIMIT 1",
+    "sql_memory_B": "SELECT stadium.name, stadium.capacity\nFROM stadium JOIN concert ON stadium.stadium_id = concert.stadium_id\nWHERE concert.year >= 2014\nGROUP BY stadium.name, stadium.capacity\nORDER BY COUNT(concert.concert_id) DESC\nLIMIT 1"
+  },
+  {
+    "question": "What is the name and capacity of the stadium with the most concerts after 2013 ?",
+    "gold_sql": "select t2.name ,  t2.capacity from concert as t1 join stadium as t2 on t1.stadium_id  =  t2.stadium_id where t1.year  >  2013 group by t2.stadium_id order by count(*) desc limit 1",
+    "sql_baseline": "```sql\nSELECT s.name, s.capacity\nFROM stadium s\nJOIN concert c ON s.stadium_id = c.stadium_id\nWHERE c.year > 2013\nGROUP BY s.stadium_id\nORDER BY COUNT(c.concert_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT S.name, S.capacity FROM stadium AS S JOIN concert AS C ON S.stadium_id = C.stadium_id WHERE C.year > 2013 GROUP BY S.stadium_id ORDER BY COUNT(C.concert_id) DESC LIMIT 1",
+    "sql_memory_B": "SELECT stadium.name, stadium.capacity\nFROM stadium\nJOIN concert ON stadium.stadium_id = concert.stadium_id\nWHERE concert.year > 2013\nGROUP BY stadium.stadium_id\nORDER BY COUNT(concert.concert_id) DESC\nLIMIT 1"
+  },
+  {
+    "question": "Which year has most number of concerts?",
+    "gold_sql": "SELECT YEAR FROM concert GROUP BY YEAR ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT year, COUNT(*) AS concert_count\nFROM concert\nGROUP BY year\nORDER BY concert_count DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT year FROM concert GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT year, COUNT(*) as concert_count\nFROM concert\nGROUP BY year\nORDER BY concert_count DESC\nLIMIT 1"
+  },
+  {
+    "question": "What is the year that had the most concerts?",
+    "gold_sql": "SELECT YEAR FROM concert GROUP BY YEAR ORDER BY count(*) DESC LIMIT 1",
+    "sql_baseline": "```sql\nSELECT year\nFROM concert\nGROUP BY year\nORDER BY COUNT(concert_id) DESC\nLIMIT 1;\n```",
+    "sql_memory_A": "SELECT year FROM concert GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1",
+    "sql_memory_B": "SELECT concert.year, count(*) \nFROM concert \nGROUP BY concert.year \nORDER BY count(*) DESC \nLIMIT 1"
+  },
+  {
+    "question": "Show the stadium names without any concert.",
+    "gold_sql": "SELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert)",
+    "sql_baseline": "```sql\nSELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert);\n```",
+    "sql_memory_A": "SELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert)",
+    "sql_memory_B": "SELECT stadium.name\nFROM stadium\nWHERE stadium.stadium_id NOT IN (SELECT concert.stadium_id FROM concert)\nGROUP BY stadium.name\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What are the names of the stadiums without any concerts?",
+    "gold_sql": "SELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert)",
+    "sql_baseline": "```sql\nSELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert);\n```",
+    "sql_memory_A": "SELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert)",
+    "sql_memory_B": "SELECT stadium.name\nFROM stadium\nWHERE stadium.stadium_id NOT IN (SELECT concert.stadium_id\nFROM concert\nGROUP BY concert.stadium_id)"
+  },
+  {
+    "question": "Show countries where a singer above age 40 and a singer below 30 are from.",
+    "gold_sql": "SELECT country FROM singer WHERE age  >  40 INTERSECT SELECT country FROM singer WHERE age  <  30",
+    "sql_baseline": "```sql\nSELECT DISTINCT s1.country\nFROM singer s1\nJOIN singer_in_concert sic1 ON s1.singer_id = sic1.singer_id\nJOIN concert c1 ON sic1.concert_id = c1.concert_id\nWHERE s1.age > 40\nAND EXISTS (\n    SELECT 1\n    FROM singer s2\n    JOIN singer_in_concert sic2 ON s2.singer_id = sic2.singer_id\n    WHERE s2.age < 30\n    AND sic2.concert_id = c1.concert_id\n);\n```",
+    "sql_memory_A": "SELECT DISTINCT T2.country FROM singer AS T1 WHERE T1.age > 40 OR T1.age < 30;",
+    "sql_memory_B": "SELECT DISTINCT singer.country\nFROM singer\nWHERE singer.age > 40\nINTERSECT\nSELECT DISTINCT singer.country\nFROM singer\nWHERE singer.age < 30;"
+  },
+  {
+    "question": "Show names for all stadiums except for stadiums having a concert in year 2014.",
+    "gold_sql": "SELECT name FROM stadium EXCEPT SELECT T2.name FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.year  =  2014",
+    "sql_baseline": "```sql\nSELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert WHERE year = 2014);\n```",
+    "sql_memory_A": "SELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert WHERE year = 2014)",
+    "sql_memory_B": "SELECT stadium.name\nFROM stadium\nWHERE stadium.stadium_id NOT IN (\n    SELECT concert.stadium_id\n    FROM concert\n    WHERE concert.year = 2014\n)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What are the names of all stadiums that did not have a concert in 2014?",
+    "gold_sql": "SELECT name FROM stadium EXCEPT SELECT T2.name FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.year  =  2014",
+    "sql_baseline": "```sql\nSELECT name \nFROM stadium \nWHERE stadium_id NOT IN (\n    SELECT stadium_id \n    FROM concert \n    WHERE year = 2014\n);\n```",
+    "sql_memory_A": "SELECT name FROM stadium WHERE stadium_id NOT IN (SELECT stadium_id FROM concert WHERE year = 2014)",
+    "sql_memory_B": "SELECT stadium.name\nFROM stadium\nWHERE stadium.stadium_id NOT IN (\n    SELECT concert.stadium_id\n    FROM concert\n    WHERE concert.year = 2014\n)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "Show the name and theme for all concerts and the number of singers in each concert.",
+    "gold_sql": "SELECT T2.concert_name ,  T2.theme ,  count(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.concert_id  =  T2.concert_id GROUP BY T2.concert_id",
+    "sql_baseline": "```sql\nSELECT c.concert_name, c.theme, COUNT(sic.singer_id) AS number_of_singers\nFROM concert c\nLEFT JOIN singer_in_concert sic ON c.concert_id = sic.concert_id\nGROUP BY c.concert_id;\n```",
+    "sql_memory_A": "SELECT T1.concert_name, T1.theme, COUNT(T2.singer_id) FROM concert AS T1 LEFT JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id GROUP BY T1.concert_id;",
+    "sql_memory_B": "SELECT concert.concert_name, concert.theme, count(singer_in_concert.singer_id)\nFROM concert LEFT JOIN singer_in_concert ON concert.concert_id = singer_in_concert.concert_id\nGROUP BY concert.concert_id;"
+  },
+  {
+    "question": "What are the names , themes , and number of singers for every concert ?",
+    "gold_sql": "select t2.concert_name ,  t2.theme ,  count(*) from singer_in_concert as t1 join concert as t2 on t1.concert_id  =  t2.concert_id group by t2.concert_id",
+    "sql_baseline": "```sql\nSELECT c.concert_name, c.theme, COUNT(sic.singer_id) AS number_of_singers\nFROM concert c\nLEFT JOIN singer_in_concert sic ON c.concert_id = sic.concert_id\nGROUP BY c.concert_id;\n```",
+    "sql_memory_A": "SELECT T1.concert_name, T1.theme, COUNT(T2.singer_id) FROM concert AS T1 LEFT JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id GROUP BY T1.concert_id;",
+    "sql_memory_B": "SELECT concert.concert_name, concert.theme, count(singer_in_concert.singer_id) AS number_of_singers\nFROM concert LEFT JOIN singer_in_concert ON concert.concert_id = singer_in_concert.concert_id\nGROUP BY concert.concert_id\nORDER BY concert.concert_name;"
+  },
+  {
+    "question": "List singer names and number of concerts for each singer.",
+    "gold_sql": "SELECT T2.name ,  count(*) FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id GROUP BY T2.singer_id",
+    "sql_baseline": "```sql\nSELECT s.name, COUNT(sic.concert_id) AS number_of_concerts\nFROM singer s\nLEFT JOIN singer_in_concert sic ON s.singer_id = sic.singer_id\nGROUP BY s.singer_id;\n```",
+    "sql_memory_A": "SELECT S.name, COUNT(SIC.concert_id) AS concert_count \nFROM singer AS S \nLEFT JOIN singer_in_concert AS SIC ON S.singer_id = SIC.singer_id \nGROUP BY S.singer_id;",
+    "sql_memory_B": "SELECT singer.name, count( * )\nFROM singer JOIN singer_in_concert ON singer.singer_id = singer_in_concert.singer_id\nGROUP BY singer.singer_id"
+  },
+  {
+    "question": "What are the names of the singers and number of concerts for each person?",
+    "gold_sql": "SELECT T2.name ,  count(*) FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id GROUP BY T2.singer_id",
+    "sql_baseline": "```sql\nSELECT s.name, COUNT(sc.concert_id) AS number_of_concerts\nFROM singer s\nLEFT JOIN singer_in_concert sc ON s.singer_id = sc.singer_id\nGROUP BY s.singer_id;\n```",
+    "sql_memory_A": "SELECT T1.name, COUNT(T2.concert_id) FROM singer AS T1 LEFT JOIN singer_in_concert AS T2 ON T1.singer_id = T2.singer_id GROUP BY T1.singer_id",
+    "sql_memory_B": "SELECT singer.name, count(concert.concert_id)\nFROM singer JOIN singer_in_concert ON singer.singer_id = singer_in_concert.singer_id\nJOIN concert ON singer_in_concert.concert_id = concert.concert_id\nGROUP BY singer.singer_id\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "List all singer names in concerts in year 2014.",
+    "gold_sql": "SELECT T2.name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id JOIN concert AS T3 ON T1.concert_id  =  T3.concert_id WHERE T3.year  =  2014",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.name \nFROM singer s\nJOIN singer_in_concert sic ON s.singer_id = sic.singer_id\nJOIN concert c ON sic.concert_id = c.concert_id\nWHERE c.year = 2014;\n```",
+    "sql_memory_A": "SELECT S.name FROM singer AS S JOIN singer_in_concert AS SIC ON S.singer_id = SIC.singer_id JOIN concert AS C ON SIC.concert_id = C.concert_id WHERE C.year = 2014;",
+    "sql_memory_B": "SELECT singer.name\nFROM singer\nJOIN singer_in_concert ON singer.singer_id = singer_in_concert.singer_id\nJOIN concert ON singer_in_concert.concert_id = concert.concert_id\nWHERE concert.year = 2014\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What are the names of the singers who performed in a concert in 2014?",
+    "gold_sql": "SELECT T2.name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id JOIN concert AS T3 ON T1.concert_id  =  T3.concert_id WHERE T3.year  =  2014",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.name\nFROM singer s\nJOIN singer_in_concert sic ON s.singer_id = sic.singer_id\nJOIN concert c ON sic.concert_id = c.concert_id\nWHERE c.year = 2014;\n```",
+    "sql_memory_A": "SELECT s.name FROM singer s JOIN singer_in_concert sic ON s.singer_id = sic.singer_id JOIN concert c ON sic.concert_id = c.concert_id WHERE c.year = 2014",
+    "sql_memory_B": "SELECT singer.name\nFROM singer\nJOIN singer_in_concert ON singer.singer_id = singer_in_concert.singer_id\nJOIN concert ON singer_in_concert.concert_id = concert.concert_id\nWHERE concert.year = 2014\nGROUP BY singer.singer_id\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "what is the name and nation of the singer who have a song having 'Hey' in its name?",
+    "gold_sql": "SELECT name ,  country FROM singer WHERE song_name LIKE '%Hey%'",
+    "sql_baseline": "```sql\nSELECT name, country FROM singer WHERE song_name LIKE '%Hey%';\n```",
+    "sql_memory_A": "SELECT T1.name, T1.country FROM singer AS T1 WHERE T1.song_name LIKE '%Hey%';",
+    "sql_memory_B": "SELECT singer.name, singer.country\nFROM singer\nWHERE singer.song_name LIKE '%Hey%'\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What is the name and country of origin of every singer who has a song with the word 'Hey' in its title?",
+    "gold_sql": "SELECT name ,  country FROM singer WHERE song_name LIKE '%Hey%'",
+    "sql_baseline": "```sql\nSELECT name, country FROM singer WHERE song_name LIKE '%Hey%';\n```",
+    "sql_memory_A": "SELECT T2.name, T2.country FROM singer AS T2 WHERE T2.song_name LIKE '%Hey%';",
+    "sql_memory_B": "SELECT singer.name, singer.country\nFROM singer\nWHERE singer.song_name LIKE '%Hey%'\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "Find the name and location of the stadiums which some concerts happened in the years of both 2014 and 2015.",
+    "gold_sql": "SELECT T2.name ,  T2.location FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.Year  =  2014 INTERSECT SELECT T2.name ,  T2.location FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.Year  =  2015",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.name, s.location\nFROM stadium s\nJOIN concert c ON s.stadium_id = c.stadium_id\nWHERE c.year IN (2014, 2015)\nGROUP BY s.stadium_id\nHAVING COUNT(DISTINCT c.year) = 2;\n```",
+    "sql_memory_A": "SELECT DISTINCT S.name, S.location FROM stadium AS S JOIN concert AS C ON S.stadium_id = C.stadium_id WHERE C.year IN (2014, 2015) GROUP BY S.stadium_id HAVING COUNT(DISTINCT C.year) = 2",
+    "sql_memory_B": "SELECT DISTINCT stadium.name, stadium.location\nFROM stadium\nJOIN concert ON stadium.stadium_id = concert.stadium_id\nWHERE concert.year IN (2014, 2015)\nGROUP BY stadium.stadium_id\nHAVING COUNT(DISTINCT concert.year) = 2;"
+  },
+  {
+    "question": "What are the names and locations of the stadiums that had concerts that occurred in both 2014 and 2015?",
+    "gold_sql": "SELECT T2.name ,  T2.location FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.Year  =  2014 INTERSECT SELECT T2.name ,  T2.location FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id WHERE T1.Year  =  2015",
+    "sql_baseline": "```sql\nSELECT DISTINCT s.name, s.location\nFROM stadium s\nJOIN concert c ON s.stadium_id = c.stadium_id\nWHERE c.year IN (2014, 2015)\nGROUP BY s.stadium_id\nHAVING COUNT(DISTINCT c.year) = 2;\n```",
+    "sql_memory_A": "SELECT DISTINCT S.name, S.location \nFROM stadium AS S \nJOIN concert AS C ON S.stadium_id = C.stadium_id \nWHERE C.year IN (2014, 2015) \nGROUP BY S.stadium_id \nHAVING COUNT(DISTINCT C.year) = 2;",
+    "sql_memory_B": "SELECT DISTINCT stadium.name, stadium.location\nFROM stadium\nJOIN concert ON stadium.stadium_id = concert.stadium_id\nWHERE concert.year IN (2014, 2015)\nGROUP BY stadium.stadium_id\nHAVING COUNT(DISTINCT concert.year) = 2;"
+  },
+  {
+    "question": "Find the number of concerts happened in the stadium with the highest capacity .",
+    "gold_sql": "select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)",
+    "sql_baseline": "```sql\nSELECT COUNT(*) \nFROM concert \nWHERE stadium_id = (SELECT stadium_id FROM stadium ORDER BY capacity DESC LIMIT 1);\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM concert WHERE stadium_id = (SELECT stadium_id FROM stadium ORDER BY capacity DESC LIMIT 1)",
+    "sql_memory_B": "SELECT count(*)\nFROM concert\nWHERE stadium_id = (SELECT stadium_id FROM stadium ORDER BY capacity DESC LIMIT 1)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  },
+  {
+    "question": "What are the number of concerts that occurred in the stadium with the largest capacity ?",
+    "gold_sql": "select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)",
+    "sql_baseline": "```sql\nSELECT COUNT(*) AS number_of_concerts\nFROM concert\nWHERE stadium_id = (SELECT stadium_id FROM stadium ORDER BY capacity DESC LIMIT 1);\n```",
+    "sql_memory_A": "SELECT COUNT(*) FROM concert WHERE stadium_id = (SELECT stadium_id FROM stadium ORDER BY capacity DESC LIMIT 1)",
+    "sql_memory_B": "SELECT count(*)\nFROM concert\nJOIN stadium ON concert.stadium_id = stadium.stadium_id\nWHERE stadium.capacity = (SELECT max(capacity) FROM stadium)\nGROUP BY NONE\nORDER BY NONE\nHAVING NONE\nLIMIT NONE\nINTERSECT NONE\nEXCEPT NONE\nUNION NONE"
+  }
+]

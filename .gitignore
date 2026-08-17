@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+venv/
+*.index
+*.pkl
+database/
+*.sqlite
+sample_train.json
+sample_train_standardised.json
+sample_dev.json
+texts_cache.pkl
