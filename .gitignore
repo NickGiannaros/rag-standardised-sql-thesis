@@ -10,3 +10,6 @@ sample_train.json
 sample_train_standardised.json
 sample_dev.json
 texts_cache.pkl
+
+# superseded by technical_document_v2.docx, kept locally only
+technical_document_update.docx
