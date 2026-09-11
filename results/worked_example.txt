@@ -1,0 +1,86 @@
+==============================================================================
+ΠΑΡΑΔΕΙΓΜΑ ΛΕΙΤΟΥΡΓΙΑΣ ΤΟΥ ΜΗΧΑΝΙΣΜΟΥ SCHEMA LINKING
+==============================================================================
+
+Προέλευση κάθε βήματος:
+  extract_keywords       <- llm_schema_linking.extract_keywords_llm
+  decompose_question     <- llm_schema_linking.decompose_question_llm
+  retrieve_tables        <- llm_schema_linking.retrieve_tables_llm
+  retrieve_columns       <- llm_schema_linking.retrieve_columns_llm
+  extract_gold_schema    <- schema_linking.extract_gold_schema
+==============================================================================
+
+Βάση:    concert_singer
+Ερώτηση: Show the stadium name and the number of concerts in each stadium.
+Gold SQL: SELECT T2.name , count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id = T2.stadium_id GROUP BY T1.stadium_id
+
+
+--- ΑΦΕΤΗΡΙΑ: το πλήρες schema (4 πίνακες, 21 στήλες) ---
+Αυτό είναι που έβλεπε το μοντέλο σε κάθε ερώτηση πριν το schema linking.
+
+    concert (5): concert_id, concert_name, stadium_id, theme, year
+    singer (7): age, country, is_male, name, singer_id, song_name, song_release_year
+    singer_in_concert (2): concert_id, singer_id
+    stadium (7): average, capacity, highest, location, lowest, name, stadium_id
+
+
+--- ΒΗΜΑ 1: εξαγωγή λέξεων-κλειδιών ---
+[
+  "stadium",
+  "name",
+  "number",
+  "concerts",
+  "each"
+]
+
+
+--- ΒΗΜΑ 2: διάσπαση σε υπο-ερωτήσεις ---
+[
+  "What are the names of all the stadiums?",
+  "How many concerts are held in each stadium?",
+  "For each stadium, combine the stadium name with the number of concerts."
+]
+
+
+--- ΒΗΜΑ 3: Table-First (επιλογή ολόκληρων πινάκων) ---
+2 πίνακες, 3 στήλες
+    concert (1): stadium_id
+    stadium (2): name, stadium_id
+
+
+--- ΒΗΜΑ 4: Column-First (επιλογή μεμονωμένων στηλών) ---
+2 πίνακες, 3 στήλες
+    concert (1): stadium_id
+    stadium (2): name, stadium_id
+
+
+--- ΕΝΩΣΗ: το schema που μπαίνει τελικά στο prompt ---
+2 πίνακες, 12 στήλες
+    concert (5): concert_id, concert_name, stadium_id, theme, year
+    stadium (7): average, capacity, highest, location, lowest, name, stadium_id
+
+
+--- ΓΙΑ ΣΥΓΚΡΙΣΗ: το oracle schema (από το gold SQL) ---
+Αυτό χρειάζεται πραγματικά το ερώτημα. Δεν είναι διαθέσιμο σε πραγματικές συνθήκες.
+2 πίνακες, 3 στήλες
+    concert (1): stadium_id
+    stadium (2): name, stadium_id
+
+
+--- ΣΥΝΟΨΗ ---
+Συνθήκη                        Πίνακες    Στήλες
+------------------------------------------------
+Full (πλήρες schema)                 4        21
+Retrieved (ο μηχανισμός)             2        12
+Perfect (oracle)                     2         3
+
+Έχασε ο μηχανισμός κάτι αναγκαίο; ΟΧΙ
+Περιττές στήλες που κρατήθηκαν: 9
+
+
+--- ΕΛΕΓΧΟΣ: ταιριάζει με το αποθηκευμένο αποτέλεσμα; ---
+Οι κλήσεις στο μοντέλο δεν είναι ντετερμινιστικές, οπότε μικρές αποκλίσεις
+είναι φυσιολογικές. Μεγάλη απόκλιση σημαίνει ότι φορτώθηκε λάθος module.
+  αποθηκευμένο: 2 πίνακες, 12 στήλες
+  τώρα:         2 πίνακες, 12 στήλες
+  ίδιοι πίνακες: ΝΑΙ  |  επικάλυψη στηλών: 100%

@@ -1,0 +1,6 @@
+group,n,retrieved,perfect,gap,perfect_wins,retrieved_wins,mcnemar_p,mean_surplus,mean_complexity
+(a) something needed was dropped,22,5,9,4,5.0,1.0,0.2188,,
+(b) nothing needed was dropped,1012,738,769,31,62.0,31.0,0.0017,,
+"complete recall, surplus=low",345,282,290,8,,,,2.9,2.03
+"complete recall, surplus=medium",329,252,258,6,,,,6.4,2.52
+"complete recall, surplus=high",338,204,221,17,,,,15.9,2.83

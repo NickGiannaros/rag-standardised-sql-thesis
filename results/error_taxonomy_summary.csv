@@ -1,0 +1,14 @@
+category,n,share_pct,fixed_by_anything_pct,fixed_by_memA_pct,fixed_by_memB_pct,fixed_by_retrieved_pct,fixed_by_perfect_pct,repairs,breaks,net
+wrong_values,139.0,46.8,40.3,18.0,15.1,7.9,23.7,,,
+wrong_arity,46.0,15.5,50.0,21.7,21.7,15.2,37.0,,,
+empty_result,45.0,15.2,42.2,11.1,11.1,6.7,31.1,,,
+too_permissive,31.0,10.4,41.9,25.8,22.6,0.0,12.9,,,
+too_restrictive,14.0,4.7,28.6,7.1,7.1,0.0,28.6,,,
+hallucinated_name,12.0,4.0,75.0,41.7,41.7,41.7,58.3,,,
+unexpected_rows,6.0,2.0,0.0,0.0,0.0,0.0,0.0,,,
+not_executable,3.0,1.0,66.7,33.3,33.3,0.0,0.0,,,
+gold_broken,1.0,0.3,0.0,0.0,0.0,0.0,0.0,,,
+WHOLE SET: Memory A,,,,,,,,55.0,61.0,-6.0
+WHOLE SET: Memory B,,,,,,,,50.0,55.0,-5.0
+WHOLE SET: Schema link,,,,,,,,26.0,20.0,6.0
+WHOLE SET: Perfect,,,,,,,,79.0,38.0,41.0

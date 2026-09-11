@@ -1,0 +1,8 @@
+comparison,b,c,discordant,diff_pp,ci_low_pp,ci_high_pp,mcnemar_p,min_significant_questions,min_significant_pp,mde80_pp
+Baseline -> Memory A (raw),61,55,116,-0.58,-2.62,1.46,0.6427,24,2.32,3.07
+Baseline -> Memory B (standard.),60,56,116,-0.39,-2.43,1.65,0.7807,24,2.32,3.07
+Baseline -> Memory B (compact),55,50,105,-0.48,-2.43,1.46,0.6965,23,2.22,2.92
+Memory A -> Memory B (compact),50,51,101,0.1,-1.81,2.0,1.0,21,2.03,2.73
+Full schema -> Retrieved schema,20,26,46,0.58,-0.7,1.87,0.4614,16,1.55,1.94
+Full schema -> Perfect schema,38,79,117,3.97,1.93,6.0,0.0002,23,2.22,2.98
+Retrieved -> Perfect schema,32,67,99,3.38,1.51,5.26,0.0006,21,2.03,2.71
