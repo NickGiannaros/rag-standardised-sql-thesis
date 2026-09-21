@@ -1,6 +1,6 @@
 """
-evaluate_value_grounding.py
-What this does: measures whether the value_grounding_fix.py corrections
+12b_evaluate_value_grounding.py
+What this does: measures whether the 12_value_grounding.py corrections
 actually move execution accuracy. For each condition (Baseline / Memory A /
 Memory B compact), executes both the original and the fixed SQL against the
 real database, compares to gold, and reports before/after accuracy plus a
@@ -8,7 +8,7 @@ paired McNemar test (same questions, same condition, before vs after the
 fix) -- so we can tell whether any change is more than chance, and also
 whether the fix ever makes things worse (a previously-correct query broken
 by an unwanted "correction").
-Input: value_grounding_results.json (from value_grounding_fix.py),
+Input: value_grounding_results.json (from 12_value_grounding.py),
 generation_results.json, generation_results_multi.json,
 generation_results_remaining.json, generation_results_compact_B.json (for
 gold_sql).

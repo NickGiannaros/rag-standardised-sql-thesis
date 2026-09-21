@@ -1,0 +1,807 @@
+﻿condition,qid,db_id,question,gold_sql,pred_sql
+baseline,44,car_1,What are the countries having at least one car maker? List name and id.,"SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;","SELECT DISTINCT c.countryid, c.countryname 
+FROM countries c 
+JOIN car_makers cm ON c.countryid = cm.country;"
+baseline,54,car_1,What are the names and ids of all countries with at least one car maker?,"SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;","SELECT DISTINCT c.countryid, c.countryname
+FROM countries c
+JOIN car_makers cm ON c.countryid = cm.country;"
+baseline,66,car_1,What is the average weight of cars each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT year, AVG(weight) AS average_weight
+FROM cars_data
+GROUP BY year;"
+baseline,74,car_1,What is the maximum accelerate for all the different cylinders?,"SELECT max(Accelerate) ,  Cylinders FROM CARS_DATA GROUP BY Cylinders;","SELECT cylinders, MAX(accelerate) AS max_accelerate
+FROM cars_data
+GROUP BY cylinders;"
+baseline,75,car_1,What is the maximum accelerate for different number of cylinders?,"SELECT max(Accelerate) ,  Cylinders FROM CARS_DATA GROUP BY Cylinders;","SELECT cylinders, MAX(accelerate) AS max_accelerate
+FROM cars_data
+GROUP BY cylinders;"
+baseline,351,employee_hire_evaluation,Count the number of employees for each city.,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) AS employee_count
+FROM employee
+GROUP BY city;"
+baseline,360,employee_hire_evaluation,Find the number of shops in each location.,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, COUNT(*) AS number_of_shops
+FROM shop
+GROUP BY location;"
+baseline,366,employee_hire_evaluation,How many shops are there in each location?,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, COUNT(*) AS shop_count
+FROM shop
+GROUP BY location;"
+baseline,376,employee_hire_evaluation,What is the number of employees from each city?,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) AS number_of_employees
+FROM employee
+GROUP BY city;"
+baseline,478,museum_visit,What are the opening year and staff number of the museum named Plaza Museum?,"SELECT Num_of_Staff ,  Open_Year FROM museum WHERE name  =  'Plaza Museum'","SELECT open_year, num_of_staff FROM museum WHERE name = 'Plaza Museum';"
+baseline,583,pets_1,Find the average and maximum age for each type of pet.,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT p.pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age
+FROM pets p
+GROUP BY p.pettype;"
+baseline,584,pets_1,Find the average weight for each pet type.,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(weight) AS average_weight
+FROM pets
+GROUP BY pettype;"
+baseline,595,pets_1,Find the maximum weight for each type of pet. List the maximum weight and pet type.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, MAX(weight) AS max_weight
+FROM pets
+GROUP BY pettype;"
+baseline,598,pets_1,Find the number of pets for each student who has any pet and student id.,"SELECT count(*) ,  T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid","SELECT s.stuid, COUNT(hp.petid) AS pet_count
+FROM student s
+JOIN has_pet hp ON s.stuid = hp.stuid
+GROUP BY s.stuid;"
+baseline,602,pets_1,"For students who have pets , how many pets does each student have ? list their ids instead of names .","select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid","SELECT h.stuid, COUNT(h.petid) AS pet_count
+FROM has_pet h
+GROUP BY h.stuid;"
+baseline,608,pets_1,List the maximum weight and type for each type of pet.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, MAX(weight) AS max_weight
+FROM pets
+GROUP BY pettype;"
+baseline,614,pets_1,What is the average and maximum age for each pet type?,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT p.pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age
+FROM pets p
+GROUP BY p.pettype;"
+baseline,615,pets_1,What is the average weight for each type of pet?,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(weight) AS average_weight
+FROM pets
+GROUP BY pettype;"
+baseline,703,student_transcripts_tracking,"For each semester, what is the name and id of the one with the most students registered?","SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT s.semester_id, s.semester_name
+FROM semesters s
+JOIN student_enrolment se ON s.semester_id = se.semester_id
+GROUP BY s.semester_id, s.semester_name
+ORDER BY COUNT(se.student_enrolment_id) DESC
+LIMIT 1;"
+baseline,714,student_transcripts_tracking,How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT student_enrolment_courses.student_course_id, COUNT(transcript_contents.student_course_id) AS transcript_count
+FROM student_enrolment_courses
+LEFT JOIN transcript_contents ON student_enrolment_courses.student_course_id = transcript_contents.student_course_id
+GROUP BY student_enrolment_courses.student_course_id
+ORDER BY transcript_count DESC
+LIMIT 1;"
+baseline,721,student_transcripts_tracking,"Show the date of the transcript which shows the least number of results, also list the id.","SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1","SELECT transcript_id, transcript_date
+FROM transcripts
+WHERE transcript_id IN (
+    SELECT transcript_id
+    FROM transcript_contents
+    GROUP BY transcript_id
+    ORDER BY COUNT(student_course_id) ASC
+    LIMIT 1
+);"
+baseline,731,student_transcripts_tracking,What are the names and id of courses having at most 2 sections?,"SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2","SELECT c.course_id, c.course_name
+FROM courses c
+JOIN sections s ON c.course_id = s.course_id
+GROUP BY c.course_id
+HAVING COUNT(s.section_id) <= 2;"
+baseline,737,student_transcripts_tracking,What is the date and id of the transcript with the least number of results?,"SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1","SELECT t.transcript_id, t.transcript_date
+FROM transcripts t
+JOIN transcript_contents tc ON t.transcript_id = tc.transcript_id
+GROUP BY t.transcript_id
+ORDER BY COUNT(tc.student_course_id) ASC
+LIMIT 1;"
+baseline,753,student_transcripts_tracking,What is the name and id of the department with the most number of degrees ?,"select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1","SELECT d.department_id, d.department_name
+FROM departments d
+JOIN degree_programs dp ON d.department_id = dp.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY COUNT(dp.degree_program_id) DESC
+LIMIT 1;"
+baseline,758,student_transcripts_tracking,What is the semester which most student registered in? Show both the name and the id.,"SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT semester_id, semester_name
+FROM semesters
+WHERE semester_id = (
+    SELECT semester_id
+    FROM student_enrolment
+    GROUP BY semester_id
+    ORDER BY COUNT(student_id) DESC
+    LIMIT 1
+);"
+baseline,775,tvshow,Find the number of cartoons directed by each of the listed directors.,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS number_of_cartoons
+FROM cartoon
+GROUP BY directed_by;"
+baseline,782,tvshow,How many cartoons did each director create?,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS cartoon_count
+FROM cartoon
+GROUP BY directed_by;"
+baseline,809,tvshow,What is minimum and maximum share of TV series?,"SELECT max(SHARE) , min(SHARE) FROM TV_series;","SELECT MIN(share) AS min_share, MAX(share) AS max_share FROM tv_series;"
+baseline,854,world_1,Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?,"SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, AVG(lifeexpectancy) AS average_life_expectancy, SUM(population) AS total_population
+FROM country
+GROUP BY continent
+HAVING AVG(lifeexpectancy) < 72;"
+baseline,858,world_1,Find the number of cities in each district whose population is greater than the average population of cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) AS city_count
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district;"
+baseline,869,world_1,"Give the name, year of independence, and surface area of the country that has the lowest population.","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea 
+FROM country 
+ORDER BY population ASC 
+LIMIT 1;"
+baseline,877,world_1,How many cities in each district have a population that is above the average population across all cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) AS city_count
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district;"
+baseline,895,world_1,Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.,"SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT c.name, COUNT(cl.language) AS language_count
+FROM country c
+JOIN countrylanguage cl ON c.code = cl.countrycode
+GROUP BY c.name
+HAVING COUNT(cl.language) >= 3;"
+baseline,912,world_1,"What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?","SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, SUM(population) AS total_population, AVG(lifeexpectancy) AS average_life_expectancy
+FROM country
+GROUP BY continent
+HAVING AVG(lifeexpectancy) < 72;"
+baseline,914,world_1,"What are the name, independence year, and surface area of the country with the smallest population?","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea 
+FROM country 
+ORDER BY population ASC 
+LIMIT 1;"
+baseline,925,world_1,"What are the population, name and leader of the country with the largest area?","SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1","SELECT c.population, c.name, c.headofstate
+FROM country c
+ORDER BY c.surfacearea DESC
+LIMIT 1;"
+baseline,926,world_1,What are the region and population of Angola?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola';"
+baseline,954,world_1,What region does Angola belong to and what is its population?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola';"
+baseline,987,wta_1,Find the number of matches happened in each year.,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, COUNT(*) AS match_count
+FROM matches
+GROUP BY year;"
+baseline,988,wta_1,Find the number of players for each hand type.,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+baseline,991,wta_1,Find the total number of tours for each ranking date.,"SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date","SELECT ranking_date, SUM(tours) AS total_tours
+FROM rankings
+GROUP BY ranking_date;"
+baseline,998,wta_1,How many matches were played in each year?,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, COUNT(*) AS matches_played
+FROM matches
+GROUP BY year;"
+baseline,999,wta_1,How many players are from each country?,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"
+baseline,1000,wta_1,How many players are there for each hand type?,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+baseline,1002,wta_1,How many total tours were there for each ranking date?,"SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date","SELECT ranking_date, SUM(tours) AS total_tours
+FROM rankings
+GROUP BY ranking_date;"
+baseline,1012,wta_1,What are the first names and country codes for players who won both the WTA Championships and the Australian Open?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'WTA Championships' INTERSECT SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'Australian Open'","SELECT DISTINCT p.first_name, p.country_code
+FROM players p
+JOIN matches m1 ON p.player_id = m1.winner_id
+JOIN matches m2 ON p.player_id = m2.winner_id
+WHERE m1.tourney_name = 'WTA Championships' AND m2.tourney_name = 'Australian Open';"
+baseline,1013,wta_1,"What are the first names of all players, and their average rankings?","SELECT avg(ranking) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT p.first_name, AVG(r.ranking) AS average_ranking
+FROM players p
+JOIN rankings r ON p.player_id = r.player_id
+GROUP BY p.first_name;"
+baseline,1014,wta_1,"What are the first names of all players, and their total ranking points?","SELECT sum(ranking_points) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT p.first_name, SUM(r.ranking_points) AS total_ranking_points
+FROM players p
+JOIN rankings r ON p.player_id = r.player_id
+GROUP BY p.first_name;"
+baseline,1033,wta_1,find the number of players for each country.,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(player_id) AS player_count
+FROM players
+GROUP BY country_code;"
+Memory A,65,car_1,What is the average weight and year for each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT year, AVG(weight) FROM cars_data GROUP BY year;"
+Memory A,66,car_1,What is the average weight of cars each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT year, AVG(weight) FROM cars_data GROUP BY year;"
+Memory A,351,employee_hire_evaluation,Count the number of employees for each city.,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, count(*) FROM employee GROUP BY city"
+Memory A,359,employee_hire_evaluation,Find the number of employees hired in each shop; show the shop name as well.,"SELECT count(*) ,  t2.name FROM hiring AS t1 JOIN shop AS t2 ON t1.shop_id  =  t2.shop_id GROUP BY t2.name","SELECT shop.name, COUNT(hiring.employee_id) AS number_of_employees FROM hiring JOIN shop ON hiring.shop_id = shop.shop_id GROUP BY shop.name"
+Memory A,360,employee_hire_evaluation,Find the number of shops in each location.,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, count(*) FROM shop GROUP BY location"
+Memory A,366,employee_hire_evaluation,How many shops are there in each location?,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, count(*) FROM shop GROUP BY location"
+Memory A,376,employee_hire_evaluation,What is the number of employees from each city?,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) FROM employee GROUP BY city"
+Memory A,478,museum_visit,What are the opening year and staff number of the museum named Plaza Museum?,"SELECT Num_of_Staff ,  Open_Year FROM museum WHERE name  =  'Plaza Museum'","SELECT open_year, num_of_staff FROM museum WHERE name = ""Plaza Museum"""
+Memory A,583,pets_1,Find the average and maximum age for each type of pet.,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, avg(pet_age) AS average_age, max(pet_age) AS maximum_age FROM pets GROUP BY pettype"
+Memory A,584,pets_1,Find the average weight for each pet type.,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, avg(weight) FROM pets GROUP BY pettype"
+Memory A,595,pets_1,Find the maximum weight for each type of pet. List the maximum weight and pet type.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, max(weight) FROM pets GROUP BY pettype"
+Memory A,598,pets_1,Find the number of pets for each student who has any pet and student id.,"SELECT count(*) ,  T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid","SELECT stuid, count(*) FROM has_pet GROUP BY stuid"
+Memory A,602,pets_1,"For students who have pets , how many pets does each student have ? list their ids instead of names .","select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid","SELECT stuid, count(*) FROM has_pet GROUP BY stuid"
+Memory A,608,pets_1,List the maximum weight and type for each type of pet.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, max(weight) FROM pets GROUP BY pettype;"
+Memory A,615,pets_1,What is the average weight for each type of pet?,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, avg(weight) FROM pets GROUP BY pettype"
+Memory A,703,student_transcripts_tracking,"For each semester, what is the name and id of the one with the most students registered?","SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT T1.semester_id, T1.semester_name FROM semesters AS T1 JOIN student_enrolment AS T2 ON T1.semester_id = T2.semester_id GROUP BY T1.semester_id ORDER BY count(T2.student_enrolment_id) DESC LIMIT 1"
+Memory A,714,student_transcripts_tracking,How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT T2.student_course_id, COUNT(*) FROM Transcript_Contents AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.student_course_id = T2.student_course_id GROUP BY T2.student_course_id ORDER BY COUNT(*) DESC LIMIT 1"
+Memory A,731,student_transcripts_tracking,What are the names and id of courses having at most 2 sections?,"SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2","SELECT T1.course_id, T1.course_name FROM courses AS T1 JOIN sections AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_id HAVING COUNT(T2.section_id) <= 2"
+Memory A,736,student_transcripts_tracking,What is the date and id of the transcript with at least 2 courses listed?,"SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id HAVING count(*)  >=  2","SELECT T1.transcript_id, T1.transcript_date FROM transcripts AS T1 JOIN transcript_contents AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.transcript_id HAVING COUNT(T2.student_course_id) >= 2"
+Memory A,758,student_transcripts_tracking,What is the semester which most student registered in? Show both the name and the id.,"SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT T1.semester_id, T1.semester_name FROM semesters AS T1 JOIN student_enrolment AS T2 ON T1.semester_id = T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1"
+Memory A,775,tvshow,Find the number of cartoons directed by each of the listed directors.,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) FROM cartoon GROUP BY directed_by"
+Memory A,782,tvshow,How many cartoons did each director create?,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) FROM cartoon GROUP BY directed_by"
+Memory A,809,tvshow,What is minimum and maximum share of TV series?,"SELECT max(SHARE) , min(SHARE) FROM TV_series;","SELECT MIN(share) AS minimum_share, MAX(share) AS maximum_share FROM tv_series;"
+Memory A,847,voter_1,What are the maximum and minimum values of area codes?,"SELECT max(area_code) ,  min(area_code) FROM area_code_state","SELECT min(area_code), max(area_code) FROM area_code_state"
+Memory A,854,world_1,Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?,"SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, AVG(lifeexpectancy) AS average_life_expectancy, SUM(population) AS total_population 
+FROM country 
+GROUP BY continent 
+HAVING AVG(lifeexpectancy) < 72;"
+Memory A,858,world_1,Find the number of cities in each district whose population is greater than the average population of cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) FROM city WHERE population > (SELECT AVG(population) FROM city) GROUP BY district;"
+Memory A,869,world_1,"Give the name, year of independence, and surface area of the country that has the lowest population.","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea FROM country ORDER BY population ASC LIMIT 1"
+Memory A,877,world_1,How many cities in each district have a population that is above the average population across all cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, count(*) FROM city WHERE population > (SELECT avg(population) FROM city) GROUP BY district;"
+Memory A,895,world_1,Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.,"SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT country.name, COUNT(countrylanguage.language) AS language_count 
+FROM country 
+JOIN countrylanguage ON country.code = countrylanguage.countrycode 
+GROUP BY country.name 
+HAVING language_count >= 3;"
+Memory A,912,world_1,"What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?","SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, SUM(population) AS total_population, AVG(lifeexpectancy) AS average_life_expectancy 
+FROM country 
+GROUP BY continent 
+HAVING AVG(lifeexpectancy) < 72;"
+Memory A,914,world_1,"What are the name, independence year, and surface area of the country with the smallest population?","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea FROM country ORDER BY population ASC LIMIT 1"
+Memory A,919,world_1,"What are the names of countries that speak more than 2 languages, as well as how many languages they speak?","SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT country.name, COUNT(countrylanguage.language) AS language_count 
+FROM country 
+JOIN countrylanguage ON country.code = countrylanguage.countrycode 
+GROUP BY country.name 
+HAVING language_count > 2;"
+Memory A,925,world_1,"What are the population, name and leader of the country with the largest area?","SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1","SELECT population, name, headofstate FROM country ORDER BY surfacearea DESC LIMIT 1"
+Memory A,926,world_1,What are the region and population of Angola?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola'"
+Memory A,954,world_1,What region does Angola belong to and what is its population?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola'"
+Memory A,987,wta_1,Find the number of matches happened in each year.,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, count(*) FROM matches GROUP BY year;"
+Memory A,988,wta_1,Find the number of players for each hand type.,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count FROM players GROUP BY hand;"
+Memory A,998,wta_1,How many matches were played in each year?,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, count(*) FROM matches GROUP BY year;"
+Memory A,999,wta_1,How many players are from each country?,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, count(*) FROM players GROUP BY country_code;"
+Memory A,1000,wta_1,How many players are there for each hand type?,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) FROM players GROUP BY hand;"
+Memory A,1012,wta_1,What are the first names and country codes for players who won both the WTA Championships and the Australian Open?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'WTA Championships' INTERSECT SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'Australian Open'","SELECT DISTINCT p.first_name, p.country_code 
+FROM players AS p 
+JOIN matches AS m1 ON p.player_id = m1.winner_id 
+JOIN matches AS m2 ON p.player_id = m2.winner_id 
+WHERE m1.tourney_name = 'WTA Championships' AND m2.tourney_name = 'Australian Open';"
+Memory A,1013,wta_1,"What are the first names of all players, and their average rankings?","SELECT avg(ranking) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT T1.first_name, AVG(T2.ranking) AS average_ranking FROM players AS T1 JOIN rankings AS T2 ON T1.player_id = T2.player_id GROUP BY T1.first_name;"
+Memory A,1033,wta_1,find the number of players for each country.,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) FROM players GROUP BY country_code;"
+Memory B,65,car_1,What is the average weight and year for each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT year, avg(weight) as average_weight FROM cars_data GROUP BY year ORDER BY year"
+Memory B,66,car_1,What is the average weight of cars each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT cars_data.year, avg(cars_data.weight) FROM cars_data GROUP BY cars_data.year"
+Memory B,72,car_1,What is the largest amount of horsepower for the models with 3 cylinders and what make is it?,"SELECT T2.horsepower ,  T1.Make FROM CAR_NAMES AS T1 JOIN CARS_DATA AS T2 ON T1.MakeId  =  T2.Id WHERE T2.cylinders  =  3 ORDER BY T2.horsepower DESC LIMIT 1;","SELECT car_names.make, max(cars_data.horsepower) FROM cars_data JOIN car_names ON cars_data.id = car_names.makeid WHERE cars_data.cylinders = 3 GROUP BY car_names.make ORDER BY max(cars_data.horsepower) DESC LIMIT 1"
+Memory B,360,employee_hire_evaluation,Find the number of shops in each location.,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, count( * ) FROM shop GROUP BY location"
+Memory B,366,employee_hire_evaluation,How many shops are there in each location?,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, count(*) FROM shop GROUP BY location"
+Memory B,376,employee_hire_evaluation,What is the number of employees from each city?,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, count(*) FROM employee GROUP BY city"
+Memory B,476,museum_visit,What are the id and name of the museum visited most times?,"SELECT t2.Museum_ID ,  t1.name FROM museum AS t1 JOIN visit AS t2 ON t1.Museum_ID  =  t2.Museum_ID GROUP BY t2.Museum_ID ORDER BY count(*) DESC LIMIT 1","SELECT museum.name, museum.museum_id
+FROM museum JOIN visit ON museum.museum_id = visit.museum_id
+GROUP BY museum.museum_id
+ORDER BY count(*) DESC
+LIMIT 1"
+Memory B,478,museum_visit,What are the opening year and staff number of the museum named Plaza Museum?,"SELECT Num_of_Staff ,  Open_Year FROM museum WHERE name  =  'Plaza Museum'","SELECT museum.open_year, museum.num_of_staff FROM museum WHERE museum.name = ""Plaza Museum"""
+Memory B,584,pets_1,Find the average weight for each pet type.,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, avg(weight) FROM pets GROUP BY pettype"
+Memory B,595,pets_1,Find the maximum weight for each type of pet. List the maximum weight and pet type.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pets.pettype, max(pets.weight)
+FROM pets
+GROUP BY pets.pettype
+ORDER BY pets.pettype;"
+Memory B,602,pets_1,"For students who have pets , how many pets does each student have ? list their ids instead of names .","select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid","SELECT has_pet.stuid, count(has_pet.petid) AS pet_count FROM has_pet GROUP BY has_pet.stuid"
+Memory B,608,pets_1,List the maximum weight and type for each type of pet.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, max(weight) FROM pets GROUP BY pettype"
+Memory B,615,pets_1,What is the average weight for each type of pet?,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pets.pettype, avg(pets.weight) FROM pets GROUP BY pets.pettype"
+Memory B,703,student_transcripts_tracking,"For each semester, what is the name and id of the one with the most students registered?","SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT semesters.semester_id, semesters.semester_name
+FROM semesters 
+JOIN student_enrolment ON semesters.semester_id = student_enrolment.semester_id
+GROUP BY semesters.semester_id
+ORDER BY count(student_enrolment.student_id) DESC
+LIMIT 1"
+Memory B,714,student_transcripts_tracking,How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT student_enrolment_courses.student_course_id, count( * )
+FROM student_enrolment_courses JOIN transcript_contents ON student_enrolment_courses.student_course_id = transcript_contents.student_course_id
+GROUP BY student_enrolment_courses.student_course_id
+ORDER BY count( * ) DESC
+LIMIT 1"
+Memory B,731,student_transcripts_tracking,What are the names and id of courses having at most 2 sections?,"SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2","SELECT courses.course_id, courses.course_name FROM courses JOIN sections ON courses.course_id = sections.course_id GROUP BY courses.course_id HAVING count(sections.section_id) <= 2"
+Memory B,736,student_transcripts_tracking,What is the date and id of the transcript with at least 2 courses listed?,"SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id HAVING count(*)  >=  2","SELECT transcripts.transcript_id, transcripts.transcript_date FROM transcripts JOIN transcript_contents ON transcripts.transcript_id = transcript_contents.transcript_id GROUP BY transcripts.transcript_id HAVING COUNT(transcript_contents.student_course_id) >= 2"
+Memory B,758,student_transcripts_tracking,What is the semester which most student registered in? Show both the name and the id.,"SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT semesters.semester_id, semesters.semester_name
+FROM semesters JOIN student_enrolment ON semesters.semester_id = student_enrolment.semester_id
+GROUP BY semesters.semester_id
+ORDER BY count(*) DESC
+LIMIT 1"
+Memory B,775,tvshow,Find the number of cartoons directed by each of the listed directors.,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS number_of_cartoons
+FROM cartoon
+GROUP BY directed_by;"
+Memory B,782,tvshow,How many cartoons did each director create?,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT cartoon.directed_by, COUNT(*) AS cartoon_count FROM cartoon GROUP BY cartoon.directed_by ORDER BY cartoon_count DESC"
+Memory B,809,tvshow,What is minimum and maximum share of TV series?,"SELECT max(SHARE) , min(SHARE) FROM TV_series;","SELECT MIN(tv_series.share) AS min_share, MAX(tv_series.share) AS max_share FROM tv_series"
+Memory B,847,voter_1,What are the maximum and minimum values of area codes?,"SELECT max(area_code) ,  min(area_code) FROM area_code_state","SELECT min(area_code_state.area_code), max(area_code_state.area_code) FROM area_code_state"
+Memory B,854,world_1,Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?,"SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT country.continent, AVG(country.lifeexpectancy) AS average_life_expectancy, SUM(country.population) AS total_population
+FROM country
+GROUP BY country.continent
+HAVING AVG(country.lifeexpectancy) < 72"
+Memory B,858,world_1,Find the number of cities in each district whose population is greater than the average population of cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, count(*) FROM city WHERE population > (SELECT AVG(population) FROM city) GROUP BY district"
+Memory B,869,world_1,"Give the name, year of independence, and surface area of the country that has the lowest population.","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea
+FROM country
+ORDER BY population ASC
+LIMIT 1"
+Memory B,877,world_1,How many cities in each district have a population that is above the average population across all cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, count(*) FROM city WHERE population > (SELECT avg(population) FROM city) GROUP BY district"
+Memory B,895,world_1,Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.,"SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT country.name, COUNT(countrylanguage.language) AS language_count
+FROM country
+JOIN countrylanguage ON country.code = countrylanguage.countrycode
+GROUP BY country.name
+HAVING language_count >= 3;"
+Memory B,912,world_1,"What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?","SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT country.continent, sum(country.population) AS total_population, avg(country.lifeexpectancy) AS average_life_expectancy
+FROM country
+GROUP BY country.continent
+HAVING avg(country.lifeexpectancy) < 72"
+Memory B,914,world_1,"What are the name, independence year, and surface area of the country with the smallest population?","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea
+FROM country
+ORDER BY population ASC
+LIMIT 1"
+Memory B,919,world_1,"What are the names of countries that speak more than 2 languages, as well as how many languages they speak?","SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT country.name, COUNT(countrylanguage.language) AS language_count
+FROM country
+JOIN countrylanguage ON country.code = countrylanguage.countrycode
+GROUP BY country.name
+HAVING language_count > 2;"
+Memory B,925,world_1,"What are the population, name and leader of the country with the largest area?","SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1","SELECT population, name, headofstate
+FROM country
+ORDER BY surfacearea DESC
+LIMIT 1;"
+Memory B,926,world_1,What are the region and population of Angola?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT country.region, country.population FROM country WHERE country.name = ""Angola"""
+Memory B,954,world_1,What region does Angola belong to and what is its population?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT country.region, country.population FROM country WHERE country.name = ""Angola"""
+Memory B,987,wta_1,Find the number of matches happened in each year.,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, count(*) AS match_count
+FROM matches
+GROUP BY year
+ORDER BY year;"
+Memory B,988,wta_1,Find the number of players for each hand type.,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Memory B,998,wta_1,How many matches were played in each year?,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, count(*)
+FROM matches
+GROUP BY year
+ORDER BY year;"
+Memory B,999,wta_1,How many players are from each country?,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, count(*)
+FROM players
+GROUP BY country_code;"
+Memory B,1000,wta_1,How many players are there for each hand type?,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Memory B,1012,wta_1,What are the first names and country codes for players who won both the WTA Championships and the Australian Open?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'WTA Championships' INTERSECT SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'Australian Open'","SELECT p.first_name, p.country_code FROM players p JOIN matches m1 ON p.player_id = m1.winner_id JOIN matches m2 ON p.player_id = m2.winner_id WHERE m1.tourney_name = 'WTA Championships' AND m2.tourney_name = 'Australian Open' GROUP BY p.player_id"
+Memory B,1013,wta_1,"What are the first names of all players, and their average rankings?","SELECT avg(ranking) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT players.first_name, AVG(rankings.ranking) AS average_ranking
+FROM players JOIN rankings ON players.player_id = rankings.player_id
+GROUP BY players.first_name;"
+Memory B,1014,wta_1,"What are the first names of all players, and their total ranking points?","SELECT sum(ranking_points) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT players.first_name, SUM(rankings.ranking_points) AS total_ranking_points
+FROM players JOIN rankings ON players.player_id = rankings.player_id
+GROUP BY players.first_name;"
+Memory B,1033,wta_1,find the number of players for each country.,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"
+Memory B compact,65,car_1,What is the average weight and year for each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT cars_data.year, avg(cars_data.weight) FROM cars_data GROUP BY cars_data.year"
+Memory B compact,66,car_1,What is the average weight of cars each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT cars_data.year, avg(cars_data.weight) FROM cars_data GROUP BY cars_data.year ORDER BY cars_data.year ASC"
+Memory B compact,351,employee_hire_evaluation,Count the number of employees for each city.,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, count( * ) FROM employee GROUP BY city"
+Memory B compact,360,employee_hire_evaluation,Find the number of shops in each location.,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, count( * ) FROM shop GROUP BY location"
+Memory B compact,366,employee_hire_evaluation,How many shops are there in each location?,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, count(*) FROM shop GROUP BY location"
+Memory B compact,376,employee_hire_evaluation,What is the number of employees from each city?,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, count(*) FROM employee GROUP BY city"
+Memory B compact,476,museum_visit,What are the id and name of the museum visited most times?,"SELECT t2.Museum_ID ,  t1.name FROM museum AS t1 JOIN visit AS t2 ON t1.Museum_ID  =  t2.Museum_ID GROUP BY t2.Museum_ID ORDER BY count(*) DESC LIMIT 1","SELECT museum.name, museum.museum_id
+FROM museum JOIN visit ON museum.museum_id = visit.museum_id
+GROUP BY museum.museum_id
+ORDER BY count(*) DESC
+LIMIT 1"
+Memory B compact,478,museum_visit,What are the opening year and staff number of the museum named Plaza Museum?,"SELECT Num_of_Staff ,  Open_Year FROM museum WHERE name  =  'Plaza Museum'","SELECT museum.open_year, museum.num_of_staff FROM museum WHERE museum.name = ""Plaza Museum"""
+Memory B compact,595,pets_1,Find the maximum weight for each type of pet. List the maximum weight and pet type.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pets.pettype, max(pets.weight) FROM pets GROUP BY pets.pettype"
+Memory B compact,598,pets_1,Find the number of pets for each student who has any pet and student id.,"SELECT count(*) ,  T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid","SELECT has_pet.stuid, count( * ) FROM has_pet GROUP BY has_pet.stuid"
+Memory B compact,602,pets_1,"For students who have pets , how many pets does each student have ? list their ids instead of names .","select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid","SELECT has_pet.stuid, count( * ) FROM has_pet GROUP BY has_pet.stuid"
+Memory B compact,608,pets_1,List the maximum weight and type for each type of pet.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pets.pettype, max(pets.weight) FROM pets GROUP BY pets.pettype"
+Memory B compact,615,pets_1,What is the average weight for each type of pet?,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pets.pettype, avg(pets.weight) FROM pets GROUP BY pets.pettype"
+Memory B compact,703,student_transcripts_tracking,"For each semester, what is the name and id of the one with the most students registered?","SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT semesters.semester_id, semesters.semester_name
+FROM semesters 
+JOIN student_enrolment ON semesters.semester_id = student_enrolment.semester_id
+GROUP BY semesters.semester_id
+ORDER BY count(student_enrolment.student_id) DESC
+LIMIT 1"
+Memory B compact,714,student_transcripts_tracking,How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT student_enrolment_courses.student_course_id, count( * )
+FROM student_enrolment_courses JOIN transcript_contents ON student_enrolment_courses.student_course_id = transcript_contents.student_course_id
+GROUP BY student_enrolment_courses.student_course_id
+ORDER BY count( * ) DESC
+LIMIT 1"
+Memory B compact,731,student_transcripts_tracking,What are the names and id of courses having at most 2 sections?,"SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2","SELECT courses.course_id, courses.course_name FROM courses JOIN sections ON courses.course_id = sections.course_id GROUP BY courses.course_id HAVING COUNT(sections.section_id) <= 2"
+Memory B compact,736,student_transcripts_tracking,What is the date and id of the transcript with at least 2 courses listed?,"SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id HAVING count(*)  >=  2","SELECT transcripts.transcript_id, transcripts.transcript_date FROM transcripts JOIN transcript_contents ON transcripts.transcript_id = transcript_contents.transcript_id GROUP BY transcripts.transcript_id HAVING COUNT(transcript_contents.student_course_id) >= 2"
+Memory B compact,758,student_transcripts_tracking,What is the semester which most student registered in? Show both the name and the id.,"SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT semesters.semester_id, semesters.semester_name
+FROM semesters JOIN student_enrolment ON semesters.semester_id = student_enrolment.semester_id
+GROUP BY semesters.semester_id
+ORDER BY count(*) DESC
+LIMIT 1"
+Memory B compact,775,tvshow,Find the number of cartoons directed by each of the listed directors.,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS number_of_cartoons
+FROM cartoon
+GROUP BY directed_by;"
+Memory B compact,782,tvshow,How many cartoons did each director create?,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT cartoon.directed_by, COUNT(*) AS cartoon_count FROM cartoon GROUP BY cartoon.directed_by ORDER BY cartoon_count DESC"
+Memory B compact,809,tvshow,What is minimum and maximum share of TV series?,"SELECT max(SHARE) , min(SHARE) FROM TV_series;","SELECT MIN(tv_series.share) AS min_share, MAX(tv_series.share) AS max_share FROM tv_series"
+Memory B compact,847,voter_1,What are the maximum and minimum values of area codes?,"SELECT max(area_code) ,  min(area_code) FROM area_code_state","SELECT min(area_code_state.area_code), max(area_code_state.area_code) FROM area_code_state"
+Memory B compact,854,world_1,Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?,"SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT country.continent, AVG(country.lifeexpectancy) AS average_life_expectancy, SUM(country.population) AS total_population
+FROM country
+GROUP BY country.continent
+HAVING AVG(country.lifeexpectancy) < 72"
+Memory B compact,858,world_1,Find the number of cities in each district whose population is greater than the average population of cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, count(*)
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district"
+Memory B compact,869,world_1,"Give the name, year of independence, and surface area of the country that has the lowest population.","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea
+FROM country
+ORDER BY population ASC
+LIMIT 1"
+Memory B compact,877,world_1,How many cities in each district have a population that is above the average population across all cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, count(*) FROM city WHERE population > (SELECT avg(population) FROM city) GROUP BY district"
+Memory B compact,895,world_1,Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.,"SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT country.name, COUNT(countrylanguage.language) AS language_count
+FROM country
+JOIN countrylanguage ON country.code = countrylanguage.countrycode
+GROUP BY country.name
+HAVING language_count >= 3;"
+Memory B compact,912,world_1,"What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?","SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT country.continent, sum(country.population) AS total_population, avg(country.lifeexpectancy) AS average_life_expectancy
+FROM country
+GROUP BY country.continent
+HAVING avg(country.lifeexpectancy) < 72"
+Memory B compact,914,world_1,"What are the name, independence year, and surface area of the country with the smallest population?","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea
+FROM country
+ORDER BY population ASC
+LIMIT 1"
+Memory B compact,919,world_1,"What are the names of countries that speak more than 2 languages, as well as how many languages they speak?","SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT country.name, COUNT(countrylanguage.language) AS language_count
+FROM country
+JOIN countrylanguage ON country.code = countrylanguage.countrycode
+GROUP BY country.name
+HAVING language_count > 2;"
+Memory B compact,925,world_1,"What are the population, name and leader of the country with the largest area?","SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1","SELECT population, name, headofstate
+FROM country
+ORDER BY surfacearea DESC
+LIMIT 1;"
+Memory B compact,926,world_1,What are the region and population of Angola?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT country.region, country.population FROM country WHERE country.name = ""Angola"""
+Memory B compact,954,world_1,What region does Angola belong to and what is its population?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT country.region, country.population FROM country WHERE country.name = ""Angola"""
+Memory B compact,987,wta_1,Find the number of matches happened in each year.,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, count(*) AS match_count
+FROM matches
+GROUP BY year
+ORDER BY year;"
+Memory B compact,988,wta_1,Find the number of players for each hand type.,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Memory B compact,998,wta_1,How many matches were played in each year?,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, count(*)
+FROM matches
+GROUP BY year
+ORDER BY year;"
+Memory B compact,999,wta_1,How many players are from each country?,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, count(*)
+FROM players
+GROUP BY country_code;"
+Memory B compact,1000,wta_1,How many players are there for each hand type?,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Memory B compact,1012,wta_1,What are the first names and country codes for players who won both the WTA Championships and the Australian Open?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'WTA Championships' INTERSECT SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'Australian Open'","SELECT DISTINCT p.first_name, p.country_code
+FROM players p
+JOIN matches m1 ON p.player_id = m1.winner_id
+JOIN matches m2 ON p.player_id = m2.winner_id
+WHERE m1.tourney_name = 'WTA Championships' AND m2.tourney_name = 'Australian Open'"
+Memory B compact,1013,wta_1,"What are the first names of all players, and their average rankings?","SELECT avg(ranking) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT players.first_name, AVG(rankings.ranking) AS average_ranking
+FROM players JOIN rankings ON players.player_id = rankings.player_id
+GROUP BY players.first_name;"
+Memory B compact,1014,wta_1,"What are the first names of all players, and their total ranking points?","SELECT sum(ranking_points) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT players.first_name, SUM(rankings.ranking_points) AS total_ranking_points
+FROM players JOIN rankings ON players.player_id = rankings.player_id
+GROUP BY players.first_name;"
+Memory B compact,1033,wta_1,find the number of players for each country.,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"
+Retrieved schema,44,car_1,What are the countries having at least one car maker? List name and id.,"SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;","SELECT DISTINCT c.countryid, c.countryname
+FROM countries c
+JOIN car_makers cm ON c.countryid = cm.country;"
+Retrieved schema,54,car_1,What are the names and ids of all countries with at least one car maker?,"SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;","SELECT DISTINCT c.countryid, c.countryname
+FROM countries c
+JOIN car_makers cm ON c.countryid = cm.country;"
+Retrieved schema,66,car_1,What is the average weight of cars each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT year, AVG(weight) AS average_weight
+FROM cars_data
+GROUP BY year;"
+Retrieved schema,74,car_1,What is the maximum accelerate for all the different cylinders?,"SELECT max(Accelerate) ,  Cylinders FROM CARS_DATA GROUP BY Cylinders;","SELECT cylinders, MAX(accelerate) AS max_accelerate
+FROM cars_data
+GROUP BY cylinders;"
+Retrieved schema,75,car_1,What is the maximum accelerate for different number of cylinders?,"SELECT max(Accelerate) ,  Cylinders FROM CARS_DATA GROUP BY Cylinders;","SELECT cylinders, MAX(accelerate) AS max_accelerate
+FROM cars_data
+GROUP BY cylinders;"
+Retrieved schema,351,employee_hire_evaluation,Count the number of employees for each city.,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) AS employee_count FROM employee GROUP BY city;"
+Retrieved schema,360,employee_hire_evaluation,Find the number of shops in each location.,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, COUNT(*) AS number_of_shops
+FROM shop
+GROUP BY location;"
+Retrieved schema,366,employee_hire_evaluation,How many shops are there in each location?,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, COUNT(*) AS shop_count
+FROM shop
+GROUP BY location;"
+Retrieved schema,376,employee_hire_evaluation,What is the number of employees from each city?,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) AS number_of_employees
+FROM employee
+GROUP BY city;"
+Retrieved schema,478,museum_visit,What are the opening year and staff number of the museum named Plaza Museum?,"SELECT Num_of_Staff ,  Open_Year FROM museum WHERE name  =  'Plaza Museum'","SELECT open_year, num_of_staff FROM museum WHERE name = 'Plaza Museum';"
+Retrieved schema,583,pets_1,Find the average and maximum age for each type of pet.,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age
+FROM pets
+GROUP BY pettype;"
+Retrieved schema,584,pets_1,Find the average weight for each pet type.,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(weight) AS average_weight
+FROM pets
+GROUP BY pettype;"
+Retrieved schema,595,pets_1,Find the maximum weight for each type of pet. List the maximum weight and pet type.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, MAX(weight) AS max_weight
+FROM pets
+GROUP BY pettype;"
+Retrieved schema,598,pets_1,Find the number of pets for each student who has any pet and student id.,"SELECT count(*) ,  T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid","SELECT h.stuid, COUNT(h.petid) AS pet_count
+FROM has_pet h
+GROUP BY h.stuid;"
+Retrieved schema,602,pets_1,"For students who have pets , how many pets does each student have ? list their ids instead of names .","select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid","SELECT h.stuid, COUNT(h.petid) AS pet_count
+FROM has_pet h
+GROUP BY h.stuid;"
+Retrieved schema,608,pets_1,List the maximum weight and type for each type of pet.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, MAX(weight) AS max_weight
+FROM pets
+GROUP BY pettype;"
+Retrieved schema,614,pets_1,What is the average and maximum age for each pet type?,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age
+FROM pets
+GROUP BY pettype;"
+Retrieved schema,615,pets_1,What is the average weight for each type of pet?,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(weight) AS average_weight
+FROM pets
+GROUP BY pettype;"
+Retrieved schema,703,student_transcripts_tracking,"For each semester, what is the name and id of the one with the most students registered?","SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT s.semester_id, s.semester_name
+FROM semesters s
+JOIN (
+    SELECT semester_id, COUNT(student_enrolment_id) AS student_count
+    FROM student_enrolment
+    GROUP BY semester_id
+) se ON s.semester_id = se.semester_id
+WHERE se.student_count = (
+    SELECT MAX(student_count)
+    FROM (
+        SELECT COUNT(student_enrolment_id) AS student_count
+        FROM student_enrolment
+        GROUP BY semester_id
+    )
+)"
+Retrieved schema,714,student_transcripts_tracking,How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT student_course_id, COUNT(transcript_id) AS transcript_count
+FROM transcript_contents
+GROUP BY student_course_id
+ORDER BY transcript_count DESC
+LIMIT 1;"
+Retrieved schema,721,student_transcripts_tracking,"Show the date of the transcript which shows the least number of results, also list the id.","SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1","SELECT t.transcript_id, t.transcript_date
+FROM transcripts t
+JOIN transcript_contents tc ON t.transcript_id = tc.transcript_id
+GROUP BY t.transcript_id, t.transcript_date
+ORDER BY COUNT(tc.student_course_id) ASC
+LIMIT 1;"
+Retrieved schema,731,student_transcripts_tracking,What are the names and id of courses having at most 2 sections?,"SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2","SELECT c.course_id, c.course_name
+FROM courses c
+JOIN sections s ON c.course_id = s.course_id
+GROUP BY c.course_id, c.course_name
+HAVING COUNT(s.section_id) <= 2;"
+Retrieved schema,737,student_transcripts_tracking,What is the date and id of the transcript with the least number of results?,"SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1","SELECT t.transcript_id, t.transcript_date
+FROM transcripts t
+JOIN transcript_contents tc ON t.transcript_id = tc.transcript_id
+GROUP BY t.transcript_id
+ORDER BY COUNT(tc.student_course_id) ASC
+LIMIT 1;"
+Retrieved schema,753,student_transcripts_tracking,What is the name and id of the department with the most number of degrees ?,"select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1","SELECT d.department_id, d.department_name
+FROM departments d
+JOIN degree_programs dp ON d.department_id = dp.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY COUNT(dp.degree_program_id) DESC
+LIMIT 1;"
+Retrieved schema,775,tvshow,Find the number of cartoons directed by each of the listed directors.,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS number_of_cartoons
+FROM cartoon
+GROUP BY directed_by;"
+Retrieved schema,782,tvshow,How many cartoons did each director create?,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS cartoon_count
+FROM cartoon
+GROUP BY directed_by;"
+Retrieved schema,809,tvshow,What is minimum and maximum share of TV series?,"SELECT max(SHARE) , min(SHARE) FROM TV_series;","SELECT MIN(share) AS min_share, MAX(share) AS max_share FROM tv_series;"
+Retrieved schema,854,world_1,Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?,"SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, AVG(lifeexpectancy) AS average_life_expectancy, SUM(population) AS total_population
+FROM country
+GROUP BY continent
+HAVING AVG(lifeexpectancy) < 72;"
+Retrieved schema,858,world_1,Find the number of cities in each district whose population is greater than the average population of cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) AS city_count
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district;"
+Retrieved schema,869,world_1,"Give the name, year of independence, and surface area of the country that has the lowest population.","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea 
+FROM country 
+ORDER BY population ASC 
+LIMIT 1;"
+Retrieved schema,877,world_1,How many cities in each district have a population that is above the average population across all cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) AS city_count
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district;"
+Retrieved schema,895,world_1,Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.,"SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT c.name, COUNT(cl.language) AS language_count
+FROM country c
+JOIN countrylanguage cl ON c.code = cl.countrycode
+GROUP BY c.name
+HAVING COUNT(cl.language) >= 3;"
+Retrieved schema,912,world_1,"What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?","SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, SUM(population) AS total_population, AVG(lifeexpectancy) AS average_life_expectancy
+FROM country
+GROUP BY continent
+HAVING AVG(lifeexpectancy) < 72;"
+Retrieved schema,914,world_1,"What are the name, independence year, and surface area of the country with the smallest population?","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea 
+FROM country 
+ORDER BY population ASC 
+LIMIT 1;"
+Retrieved schema,919,world_1,"What are the names of countries that speak more than 2 languages, as well as how many languages they speak?","SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT c.name, COUNT(cl.language) AS language_count
+FROM country c
+JOIN countrylanguage cl ON c.code = cl.countrycode
+GROUP BY c.code
+HAVING COUNT(cl.language) > 2;"
+Retrieved schema,925,world_1,"What are the population, name and leader of the country with the largest area?","SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1","SELECT population, name, headofstate 
+FROM country 
+ORDER BY surfacearea DESC 
+LIMIT 1;"
+Retrieved schema,926,world_1,What are the region and population of Angola?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola';"
+Retrieved schema,934,world_1,What is the language spoken by the largest percentage of people in each country?,"SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode","SELECT cl.countrycode, cl.language, MAX(cl.percentage) AS max_percentage
+FROM countrylanguage cl
+GROUP BY cl.countrycode;"
+Retrieved schema,954,world_1,What region does Angola belong to and what is its population?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola';"
+Retrieved schema,987,wta_1,Find the number of matches happened in each year.,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, COUNT(*) AS match_count
+FROM matches
+GROUP BY year;"
+Retrieved schema,988,wta_1,Find the number of players for each hand type.,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Retrieved schema,991,wta_1,Find the total number of tours for each ranking date.,"SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date","SELECT ranking_date, SUM(tours) AS total_tours
+FROM rankings
+GROUP BY ranking_date;"
+Retrieved schema,998,wta_1,How many matches were played in each year?,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, COUNT(*) AS match_count
+FROM matches
+GROUP BY year;"
+Retrieved schema,999,wta_1,How many players are from each country?,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"
+Retrieved schema,1000,wta_1,How many players are there for each hand type?,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Retrieved schema,1002,wta_1,How many total tours were there for each ranking date?,"SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date","SELECT ranking_date, SUM(tours) AS total_tours
+FROM rankings
+GROUP BY ranking_date;"
+Retrieved schema,1012,wta_1,What are the first names and country codes for players who won both the WTA Championships and the Australian Open?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'WTA Championships' INTERSECT SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN matches AS T2 ON T1.player_id  =  T2.winner_id WHERE T2.tourney_name  =  'Australian Open'","SELECT DISTINCT p.first_name, p.country_code
+FROM players p
+JOIN matches m1 ON p.player_id = m1.winner_id
+JOIN matches m2 ON p.player_id = m2.winner_id
+WHERE m1.tourney_name = 'WTA Championships' AND m2.tourney_name = 'Australian Open';"
+Retrieved schema,1013,wta_1,"What are the first names of all players, and their average rankings?","SELECT avg(ranking) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT p.first_name, AVG(r.ranking) AS average_ranking
+FROM players p
+JOIN rankings r ON p.player_id = r.player_id
+GROUP BY p.first_name;"
+Retrieved schema,1014,wta_1,"What are the first names of all players, and their total ranking points?","SELECT sum(ranking_points) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name","SELECT p.first_name, SUM(r.ranking_points) AS total_ranking_points
+FROM players p
+JOIN rankings r ON p.player_id = r.player_id
+GROUP BY p.first_name;"
+Retrieved schema,1025,wta_1,What is the first name and country code of the player with the most tours?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id ORDER BY T2.tours DESC LIMIT 1","SELECT p.first_name, p.country_code
+FROM players p
+JOIN rankings r ON p.player_id = r.player_id
+ORDER BY r.tours DESC
+LIMIT 1;"
+Retrieved schema,1033,wta_1,find the number of players for each country.,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"
+Perfect schema,7,battle_death,What are the death and injury situations caused by the ship with tonnage 't'?,"SELECT T1.killed ,  T1.injured FROM death AS T1 JOIN ship AS t2 ON T1.caused_by_ship_id  =  T2.id WHERE T2.tonnage  =  't'","SELECT d.injured, d.killed 
+FROM death d 
+JOIN ship s ON d.caused_by_ship_id = s.id 
+WHERE s.tonnage = 't';"
+Perfect schema,28,car_1,How many car models are produced by each maker ? Only list the count and the maker full name .,"select count(*) ,  t2.fullname from model_list as t1 join car_makers as t2 on t1.maker  =  t2.id group by t2.id;","SELECT c.fullname, COUNT(m.maker) AS model_count
+FROM car_makers c
+LEFT JOIN model_list m ON c.id = m.maker
+GROUP BY c.fullname;"
+Perfect schema,66,car_1,What is the average weight of cars each year?,"SELECT avg(Weight) ,  YEAR FROM CARS_DATA GROUP BY YEAR;","SELECT year, AVG(weight) AS average_weight
+FROM cars_data
+GROUP BY year;"
+Perfect schema,72,car_1,What is the largest amount of horsepower for the models with 3 cylinders and what make is it?,"SELECT T2.horsepower ,  T1.Make FROM CAR_NAMES AS T1 JOIN CARS_DATA AS T2 ON T1.MakeId  =  T2.Id WHERE T2.cylinders  =  3 ORDER BY T2.horsepower DESC LIMIT 1;","SELECT cn.make, MAX(cd.horsepower) AS max_horsepower
+FROM cars_data cd
+JOIN car_names cn ON cd.id = cn.makeid
+WHERE cd.cylinders = 3
+GROUP BY cn.make
+ORDER BY max_horsepower DESC
+LIMIT 1;"
+Perfect schema,74,car_1,What is the maximum accelerate for all the different cylinders?,"SELECT max(Accelerate) ,  Cylinders FROM CARS_DATA GROUP BY Cylinders;","SELECT cylinders, MAX(accelerate) AS max_accelerate
+FROM cars_data
+GROUP BY cylinders;"
+Perfect schema,75,car_1,What is the maximum accelerate for different number of cylinders?,"SELECT max(Accelerate) ,  Cylinders FROM CARS_DATA GROUP BY Cylinders;","SELECT cylinders, MAX(accelerate) AS max_accelerate
+FROM cars_data
+GROUP BY cylinders;"
+Perfect schema,209,cre_Doc_Template_Mgt,"Return the lowest version number, along with its corresponding template type code.","SELECT min(Version_Number) ,  template_type_code FROM Templates","SELECT template_type_code, MIN(version_number) AS lowest_version
+FROM templates
+GROUP BY template_type_code
+ORDER BY lowest_version
+LIMIT 1;"
+Perfect schema,215,cre_Doc_Template_Mgt,Return the version numbers and template type codes of templates with a version number greater than 5.,"SELECT version_number ,  template_type_code FROM Templates WHERE version_number  >  5","SELECT template_type_code, version_number FROM templates WHERE version_number > 5;"
+Perfect schema,263,cre_Doc_Template_Mgt,What is the version number and template type code for the template with version number later than 5?,"SELECT version_number ,  template_type_code FROM Templates WHERE version_number  >  5","SELECT template_type_code, version_number FROM templates WHERE version_number > 5;"
+Perfect schema,264,cre_Doc_Template_Mgt,What the smallest version number and its template type code?,"SELECT min(Version_Number) ,  template_type_code FROM Templates","SELECT template_type_code, MIN(version_number) AS smallest_version
+FROM templates
+GROUP BY template_type_code
+ORDER BY smallest_version
+LIMIT 1;"
+Perfect schema,351,employee_hire_evaluation,Count the number of employees for each city.,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) AS employee_count FROM employee GROUP BY city;"
+Perfect schema,360,employee_hire_evaluation,Find the number of shops in each location.,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, COUNT(*) AS number_of_shops
+FROM shop
+GROUP BY location;"
+Perfect schema,366,employee_hire_evaluation,How many shops are there in each location?,"SELECT count(*) ,  LOCATION FROM shop GROUP BY LOCATION","SELECT location, COUNT(*) AS shop_count FROM shop GROUP BY location;"
+Perfect schema,376,employee_hire_evaluation,What is the number of employees from each city?,"SELECT count(*) ,  city FROM employee GROUP BY city","SELECT city, COUNT(*) AS number_of_employees FROM employee GROUP BY city;"
+Perfect schema,478,museum_visit,What are the opening year and staff number of the museum named Plaza Museum?,"SELECT Num_of_Staff ,  Open_Year FROM museum WHERE name  =  'Plaza Museum'","SELECT open_year, num_of_staff FROM museum WHERE name = 'Plaza Museum';"
+Perfect schema,583,pets_1,Find the average and maximum age for each type of pet.,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age
+FROM pets
+GROUP BY pettype;"
+Perfect schema,584,pets_1,Find the average weight for each pet type.,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(weight) AS average_weight FROM pets GROUP BY pettype;"
+Perfect schema,595,pets_1,Find the maximum weight for each type of pet. List the maximum weight and pet type.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, MAX(weight) AS max_weight FROM pets GROUP BY pettype;"
+Perfect schema,598,pets_1,Find the number of pets for each student who has any pet and student id.,"SELECT count(*) ,  T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid GROUP BY T1.stuid","SELECT stuid, COUNT(*) AS pet_count
+FROM has_pet
+GROUP BY stuid;"
+Perfect schema,602,pets_1,"For students who have pets , how many pets does each student have ? list their ids instead of names .","select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid","SELECT h.stuid, COUNT(*) AS pet_count
+FROM has_pet h
+GROUP BY h.stuid;"
+Perfect schema,608,pets_1,List the maximum weight and type for each type of pet.,"SELECT max(weight) ,  petType FROM pets GROUP BY petType","SELECT pettype, MAX(weight) AS max_weight FROM pets GROUP BY pettype;"
+Perfect schema,614,pets_1,What is the average and maximum age for each pet type?,"SELECT avg(pet_age) ,  max(pet_age) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(pet_age) AS average_age, MAX(pet_age) AS maximum_age
+FROM pets
+GROUP BY pettype;"
+Perfect schema,615,pets_1,What is the average weight for each type of pet?,"SELECT avg(weight) ,  pettype FROM pets GROUP BY pettype","SELECT pettype, AVG(weight) AS average_weight FROM pets GROUP BY pettype;"
+Perfect schema,703,student_transcripts_tracking,"For each semester, what is the name and id of the one with the most students registered?","SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT s.semester_id, s.semester_name
+FROM semesters s
+JOIN student_enrolment se ON s.semester_id = se.semester_id
+GROUP BY s.semester_id, s.semester_name
+ORDER BY COUNT(se.semester_id) DESC
+LIMIT 1;"
+Perfect schema,714,student_transcripts_tracking,How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT student_course_id, COUNT(*) AS transcript_count
+FROM transcript_contents
+GROUP BY student_course_id
+ORDER BY transcript_count DESC
+LIMIT 1;"
+Perfect schema,731,student_transcripts_tracking,What are the names and id of courses having at most 2 sections?,"SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2","SELECT c.course_id, c.course_name
+FROM courses c
+JOIN sections s ON c.course_id = s.course_id
+GROUP BY c.course_id, c.course_name
+HAVING COUNT(s.course_id) <= 2;"
+Perfect schema,742,student_transcripts_tracking,"What is the earliest date of a transcript release, and what details can you tell me?","SELECT transcript_date ,  other_details FROM Transcripts ORDER BY transcript_date ASC LIMIT 1","SELECT other_details, MIN(transcript_date) AS earliest_date
+FROM transcripts;"
+Perfect schema,751,student_transcripts_tracking,What is the maximum number of times that a course shows up in different transcripts and what is that course's enrollment id?,"SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1","SELECT student_course_id, COUNT(*) AS course_count
+FROM transcript_contents
+GROUP BY student_course_id
+ORDER BY course_count DESC
+LIMIT 1;"
+Perfect schema,753,student_transcripts_tracking,What is the name and id of the department with the most number of degrees ?,"select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1","SELECT d.department_id, d.department_name
+FROM departments d
+JOIN degree_programs dp ON d.department_id = dp.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY COUNT(dp.department_id) DESC
+LIMIT 1;"
+Perfect schema,758,student_transcripts_tracking,What is the semester which most student registered in? Show both the name and the id.,"SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1","SELECT s.semester_id, s.semester_name
+FROM semesters s
+JOIN student_enrolment se ON s.semester_id = se.semester_id
+GROUP BY s.semester_id, s.semester_name
+ORDER BY COUNT(se.semester_id) DESC
+LIMIT 1;"
+Perfect schema,775,tvshow,Find the number of cartoons directed by each of the listed directors.,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS number_of_cartoons
+FROM cartoon
+GROUP BY directed_by;"
+Perfect schema,782,tvshow,How many cartoons did each director create?,"SELECT count(*) ,  Directed_by FROM cartoon GROUP BY Directed_by","SELECT directed_by, COUNT(*) AS cartoon_count
+FROM cartoon
+GROUP BY directed_by;"
+Perfect schema,809,tvshow,What is minimum and maximum share of TV series?,"SELECT max(SHARE) , min(SHARE) FROM TV_series;","SELECT MIN(share) AS min_share, MAX(share) AS max_share FROM tv_series;"
+Perfect schema,854,world_1,Find the average life expectancy and total population for each continent where the average life expectancy is shorter than 72?,"SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, AVG(lifeexpectancy) AS average_life_expectancy, SUM(population) AS total_population
+FROM country
+GROUP BY continent
+HAVING AVG(lifeexpectancy) < 72;"
+Perfect schema,858,world_1,Find the number of cities in each district whose population is greater than the average population of cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) AS city_count
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district;"
+Perfect schema,869,world_1,"Give the name, year of independence, and surface area of the country that has the lowest population.","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea FROM country ORDER BY population ASC LIMIT 1;"
+Perfect schema,877,world_1,How many cities in each district have a population that is above the average population across all cities?,"SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District","SELECT district, COUNT(*) AS city_count
+FROM city
+WHERE population > (SELECT AVG(population) FROM city)
+GROUP BY district;"
+Perfect schema,895,world_1,Return the country name and the numbers of languages spoken for each country that speaks at least 3 languages.,"SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT c.name, COUNT(cl.language) AS language_count
+FROM country c
+JOIN countrylanguage cl ON c.code = cl.countrycode
+GROUP BY c.name
+HAVING COUNT(cl.language) >= 3;"
+Perfect schema,912,world_1,"What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?","SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72","SELECT continent, SUM(population) AS total_population, AVG(lifeexpectancy) AS average_life_expectancy
+FROM country
+GROUP BY continent
+HAVING AVG(lifeexpectancy) < 72;"
+Perfect schema,914,world_1,"What are the name, independence year, and surface area of the country with the smallest population?","SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1","SELECT name, indepyear, surfacearea FROM country ORDER BY population ASC LIMIT 1;"
+Perfect schema,919,world_1,"What are the names of countries that speak more than 2 languages, as well as how many languages they speak?","SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2","SELECT c.name, COUNT(cl.language) AS language_count
+FROM country c
+JOIN countrylanguage cl ON c.code = cl.countrycode
+GROUP BY c.code
+HAVING COUNT(cl.language) > 2;"
+Perfect schema,925,world_1,"What are the population, name and leader of the country with the largest area?","SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1","SELECT population, name, headofstate 
+FROM country 
+ORDER BY surfacearea DESC 
+LIMIT 1;"
+Perfect schema,926,world_1,What are the region and population of Angola?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola';"
+Perfect schema,934,world_1,What is the language spoken by the largest percentage of people in each country?,"SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode","SELECT countrycode, language, MAX(percentage) AS max_percentage
+FROM countrylanguage
+GROUP BY countrycode;"
+Perfect schema,954,world_1,What region does Angola belong to and what is its population?,"SELECT Population ,  Region FROM country WHERE Name  =  ""Angola""","SELECT region, population FROM country WHERE name = 'Angola';"
+Perfect schema,987,wta_1,Find the number of matches happened in each year.,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, COUNT(*) AS match_count
+FROM matches
+GROUP BY year;"
+Perfect schema,988,wta_1,Find the number of players for each hand type.,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count
+FROM players
+GROUP BY hand;"
+Perfect schema,991,wta_1,Find the total number of tours for each ranking date.,"SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date","SELECT ranking_date, SUM(tours) AS total_tours
+FROM rankings
+GROUP BY ranking_date;"
+Perfect schema,998,wta_1,How many matches were played in each year?,"SELECT count(*) ,  YEAR FROM matches GROUP BY YEAR","SELECT year, COUNT(*) AS match_count FROM matches GROUP BY year;"
+Perfect schema,999,wta_1,How many players are from each country?,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"
+Perfect schema,1000,wta_1,How many players are there for each hand type?,"SELECT count(*) ,  hand FROM players GROUP BY hand","SELECT hand, COUNT(*) AS player_count FROM players GROUP BY hand;"
+Perfect schema,1002,wta_1,How many total tours were there for each ranking date?,"SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date","SELECT ranking_date, SUM(tours) AS total_tours
+FROM rankings
+GROUP BY ranking_date;"
+Perfect schema,1025,wta_1,What is the first name and country code of the player with the most tours?,"SELECT T1.country_code ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id ORDER BY T2.tours DESC LIMIT 1","SELECT p.first_name, p.country_code
+FROM players p
+JOIN rankings r ON p.player_id = r.player_id
+ORDER BY r.tours DESC
+LIMIT 1;"
+Perfect schema,1031,wta_1,find the names of loser and winner who played in the match with greatest number of minutes.,"SELECT winner_name ,  loser_name FROM matches ORDER BY minutes DESC LIMIT 1","SELECT loser_name, winner_name 
+FROM matches 
+ORDER BY minutes DESC 
+LIMIT 1;"
+Perfect schema,1033,wta_1,find the number of players for each country.,"SELECT count(*) ,  country_code FROM players GROUP BY country_code","SELECT country_code, COUNT(*) AS player_count
+FROM players
+GROUP BY country_code;"

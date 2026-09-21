@@ -1,5 +1,5 @@
 """
-value_grounding_fix.py
+12_value_grounding.py
 What this does: the "light version" of the value-grounding idea. Takes the
 already-generated SQL for Baseline / Memory A / Memory B (compact) across the
 full 1034-question dev set, finds string literals compared against a column

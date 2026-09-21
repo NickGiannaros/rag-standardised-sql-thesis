@@ -1,0 +1,8 @@
+what,mean_chars,median_chars,max_chars,mean_lines,mean_gpt4omini_tokens,mean_minilm_tokens,over_256_minilm_tokens,n
+raw_sql,109.6,93,577,1,30.9,34.4,0,6999
+standardised_sql,231.0,206,792,12.5,61.0,52.2,0,6999
+standardised_compact,131.4,116,624,3.7,29.4,34.7,0,6999
+text_A,744.9,562,4246,1,205.5,284.6,2860,6999
+text_B,866.2,693,4432,12.5,235.6,302.3,3029,6999
+text_B_compact,766.7,582,4268,3.7,204.0,284.8,2864,6999
+schema,539.4,326,3672,1,153.8,230.4,2263,6999

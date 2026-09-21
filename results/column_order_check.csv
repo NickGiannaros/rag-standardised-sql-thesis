@@ -1,0 +1,7 @@
+﻿condition,correct_now,accuracy_now_pct,column_order_equivalents,correct_if_counted,accuracy_if_counted_pct,difference_pp
+baseline,737,71.3,49,786,76.0,4.7
+Memory A,731,70.7,43,774,74.9,4.2
+Memory B,733,70.9,42,775,75.0,4.1
+Memory B compact,732,70.8,42,774,74.9,4.1
+Retrieved schema,743,71.9,51,794,76.8,4.9
+Perfect schema,778,75.2,55,833,80.6,5.3

@@ -3,7 +3,7 @@
 What this does: an exploratory check -- does the raw-vs-Standardised effect
 depend on how complex the query is? The idea: the NONE-boilerplate takes up
 proportionally less space in a complex query, so maybe it hurts less (or
-even helps) there. Scores each gold query 0-7 based on which clauses/
+even helps) there. Scores each gold query 0-10 based on which clauses/
 features it uses, and splits questions into three difficulty groups
 (Low/Medium/High). Result: a visible pattern shows up (raw SQL ahead on easy
 questions, Standardised SQL ahead on medium/hard ones) -- but see
